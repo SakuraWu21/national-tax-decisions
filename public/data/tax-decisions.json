@@ -959,6 +959,6 @@
     "backupUrl": null,
     "pageTitle": "税务处理决定书",
     "pageStatus": "正常",
-    "notes": "页面未提取到可确认的官方发布日期。 Excel 与 CSV 历史数据已合并核对。"
+    "notes": "页面未提取到可确认的官方发布日期。 Excel 与 CSV 历史数据已合并核对。 字段“官方原文链接”存在冲突:保留原值“http://neimenggu.chinatax.gov.cn/sjpd/eeds/xjtzgghhht/202311/P020231101635149652485.pdf”,新值“http://neimenggu.chinatax.gov.cn/sjpd/eeds/tzgghhht/202311/P020231101635149652485.pdf”未静默覆盖。"
   }
 ]
