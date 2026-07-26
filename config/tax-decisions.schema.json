@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "全国税务决定书公开数据",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "caseGroupId",
+      "province",
+      "city",
+      "district",
+      "issuingAuthority",
+      "inspectionAuthority",
+      "partyName",
+      "unifiedSocialCreditCode",
+      "legalRepresentative",
+      "documentType",
+      "documentNumber",
+      "relatedTreatmentDocumentNumber",
+      "relatedPenaltyDocumentNumber",
+      "violationFacts",
+      "taxTypes",
+      "recoveredTaxAmount",
+      "lateFeeAmount",
+      "fineAmount",
+      "confiscatedIncomeAmount",
+      "result",
+      "decisionDate",
+      "officialPublishDate",
+      "thirdPartyPublishDate",
+      "firstDiscoveredDate",
+      "lastVerifiedDate",
+      "completeness",
+      "sourceLevel",
+      "verificationStatus",
+      "officialUrl",
+      "attachmentUrl",
+      "backupUrl",
+      "pageTitle",
+      "pageStatus",
+      "notes"
+    ],
+    "properties": {
+      "id": { "type": "string", "minLength": 1 },
+      "caseGroupId": { "type": ["string", "null"] },
+      "province": { "type": ["string", "null"] },
+      "city": { "type": ["string", "null"] },
+      "district": { "type": ["string", "null"] },
+      "issuingAuthority": { "type": ["string", "null"] },
+      "inspectionAuthority": { "type": ["string", "null"] },
+      "partyName": { "type": ["string", "null"] },
+      "unifiedSocialCreditCode": { "type": ["string", "null"] },
+      "legalRepresentative": { "type": ["string", "null"] },
+      "documentType": {
+        "enum": ["税务处理决定书", "税务行政处罚决定书"]
+      },
+      "documentNumber": { "type": ["string", "null"] },
+      "relatedTreatmentDocumentNumber": { "type": ["string", "null"] },
+      "relatedPenaltyDocumentNumber": { "type": ["string", "null"] },
+      "violationFacts": { "type": ["string", "null"] },
+      "taxTypes": { "type": ["string", "null"] },
+      "recoveredTaxAmount": { "type": ["number", "null"], "minimum": 0 },
+      "lateFeeAmount": { "type": ["number", "null"], "minimum": 0 },
+      "fineAmount": { "type": ["number", "null"], "minimum": 0 },
+      "confiscatedIncomeAmount": { "type": ["number", "null"], "minimum": 0 },
+      "result": { "type": ["string", "null"] },
+      "decisionDate": { "$ref": "#/$defs/dateOrNull" },
+      "officialPublishDate": { "$ref": "#/$defs/dateOrNull" },
+      "thirdPartyPublishDate": { "$ref": "#/$defs/dateOrNull" },
+      "firstDiscoveredDate": { "$ref": "#/$defs/dateOrNull" },
+      "lastVerifiedDate": { "$ref": "#/$defs/dateOrNull" },
+      "completeness": { "type": ["string", "null"] },
+      "sourceLevel": { "type": ["string", "null"] },
+      "verificationStatus": { "enum": ["已核验", "待核验", null] },
+      "officialUrl": { "type": ["string", "null"], "format": "uri" },
+      "attachmentUrl": { "type": ["string", "null"], "format": "uri" },
+      "backupUrl": { "type": ["string", "null"] },
+      "pageTitle": { "type": ["string", "null"] },
+      "pageStatus": {
+        "enum": ["正常", "附件正常", "暂时无法访问", "页面已删除", "内容不匹配", "需要人工核验", null]
+      },
+      "notes": { "type": ["string", "null"] }
+    }
+  },
+  "$defs": {
+    "dateOrNull": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$" }
+      ]
+    }
+  }
+}

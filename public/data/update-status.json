@@ -1,0 +1,20 @@
+{
+  "status": "normal",
+  "lastUpdated": "2026-07-26T15:21:25+08:00",
+  "timezone": "Asia/Shanghai",
+  "nextScheduledUpdate": "每日 12:00",
+  "searchRange": "2026-07-23 至 2026-07-26",
+  "searchedPages": 96,
+  "total": 26,
+  "todayNew": 26,
+  "completeDocuments": 12,
+  "clues": 14,
+  "pending": 10,
+  "invalidLinks": 6,
+  "newCompleteDocuments": 0,
+  "newClues": 0,
+  "updatedRecords": 2,
+  "duplicateRecords": 5,
+  "runSuccess": true,
+  "message": "本次检索未发现符合收录标准的新文书。"
+}
