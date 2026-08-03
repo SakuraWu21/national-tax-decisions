@@ -1,20 +1,20 @@
 {
   "status": "normal",
-  "lastUpdated": "2026-08-02T14:38:13+08:00",
+  "lastUpdated": "2026-08-03T15:33:31+08:00",
   "timezone": "Asia/Shanghai",
   "nextScheduledUpdate": "每日 12:00",
-  "searchRange": "2026-07-30 至 2026-08-02",
-  "searchedPages": 84,
+  "searchRange": "2026-07-31 至 2026-08-03",
+  "searchedPages": 98,
   "total": 32,
-  "todayNew": 2,
+  "todayNew": 0,
   "completeDocuments": 16,
   "clues": 16,
   "pending": 12,
   "invalidLinks": 6,
   "newCompleteDocuments": 0,
-  "newClues": 2,
+  "newClues": 0,
   "updatedRecords": 2,
   "duplicateRecords": 6,
   "runSuccess": true,
-  "message": "已完成候选发现、逐条访问核验、去重、关联和历史数据增量写入。"
+  "message": "本次检索未发现符合收录标准的新文书。"
 }
