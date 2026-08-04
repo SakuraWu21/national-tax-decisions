@@ -3,14 +3,19 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   async headers() {
+    const alwaysFresh = [
+      { key: "Cache-Control", value: "no-store, max-age=0" },
+      { key: "CDN-Cache-Control", value: "no-store" },
+      { key: "Vercel-CDN-Cache-Control", value: "no-store" },
+    ];
     return [
       {
         source: "/data/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=300, stale-while-revalidate=3600" }],
+        headers: alwaysFresh,
       },
       {
         source: "/downloads/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=300" }],
+        headers: alwaysFresh,
       },
     ];
   },

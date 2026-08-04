@@ -82,6 +82,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
   const [records, setRecords] = useState<TaxDecision[]>([]);
   const [status, setStatus] = useState<UpdateStatus | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(true);
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
   const [filters, setFilters] = useState<Filters>(() => filtersFromParams(initialSearchParams));
@@ -95,12 +96,21 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
 
   useEffect(() => {
     const controller = new AbortController();
+    const version = Date.now();
     Promise.all([
-      fetch("/data/tax-decisions.json", { signal: controller.signal }).then((response) => {
+      fetch(`/data/tax-decisions.json?v=${version}`, {
+        cache: "no-store",
+        headers: { Pragma: "no-cache" },
+        signal: controller.signal,
+      }).then((response) => {
         if (!response.ok) throw new Error("无法读取文书数据");
         return response.json() as Promise<TaxDecision[]>;
       }),
-      fetch("/data/update-status.json", { signal: controller.signal }).then((response) => {
+      fetch(`/data/update-status.json?v=${version}`, {
+        cache: "no-store",
+        headers: { Pragma: "no-cache" },
+        signal: controller.signal,
+      }).then((response) => {
         if (!response.ok) throw new Error("无法读取更新状态");
         return response.json() as Promise<UpdateStatus>;
       }),
@@ -114,10 +124,29 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
         setError(reason instanceof Error ? reason.message : "数据读取失败，请稍后重试");
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+          setRefreshing(false);
+        }
       });
     return () => controller.abort();
   }, [retry]);
+
+  useEffect(() => {
+    const refresh = () => {
+      setRefreshing(true);
+      setRetry((value) => value + 1);
+    };
+    const interval = window.setInterval(refresh, 5 * 60 * 1000);
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     if (queryInput === filters.query) return;
@@ -270,7 +299,23 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
                   {status.status === "normal" ? "数据正常" : "部分来源待恢复"}
                 </span>
                 <span>最后更新：{formatDateTime(status.lastUpdated)}</span>
-                <span>每日12:00自动更新</span>
+                <span>{status.nextScheduledUpdate}自动更新</span>
+                <Button
+                  aria-label="立即刷新数据"
+                  className="h-7 gap-1 px-2 text-xs"
+                  disabled={refreshing}
+                  onClick={() => {
+                    setRefreshing(true);
+                    setError("");
+                    setRetry((value) => value + 1);
+                  }}
+                  size="sm"
+                  title="绕过缓存并重新读取最新数据"
+                  variant="ghost"
+                >
+                  <RefreshCw className={`size-3.5 ${refreshing ? "animate-spin" : ""}`} />
+                  刷新数据
+                </Button>
               </div>
             </div>
           </div>
@@ -278,13 +323,19 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
             {status.runSuccess ? (
               <>
                 <Button asChild className="bg-blue-700 hover:bg-blue-800">
-                  <a href="/downloads/全国税务处理及行政处罚决定书汇总.xlsx" download>
+                  <a
+                    href={`/downloads/全国税务处理及行政处罚决定书汇总.xlsx?v=${encodeURIComponent(status.lastUpdated)}`}
+                    download
+                  >
                     <Download className="size-4" />
                     下载Excel
                   </a>
                 </Button>
                 <Button asChild variant="outline">
-                  <a href="/downloads/全国税务处理及行政处罚决定书汇总.csv" download>
+                  <a
+                    href={`/downloads/全国税务处理及行政处罚决定书汇总.csv?v=${encodeURIComponent(status.lastUpdated)}`}
+                    download
+                  >
                     <Download className="size-4" />
                     下载CSV
                   </a>
