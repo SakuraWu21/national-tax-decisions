@@ -21,6 +21,7 @@ import shutil
 import sys
 import time
 import unicodedata
+import zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -87,6 +88,7 @@ EXCLUDED_TITLES = (
 OFFICIAL_SUFFIXES = (".chinatax.gov.cn", ".gov.cn")
 NORMAL_STATES = {"正常", "附件正常"}
 SOURCE_PRIORITY = {"第三方待核验": 1, "政府公开平台": 2, "税务机关官网": 3}
+HTTPS_UPGRADE_HOSTS = {"neimenggu.chinatax.gov.cn"}
 
 MONEY_FIELDS = {"追缴税款金额", "滞纳金金额", "罚款金额", "没收违法所得金额"}
 DATE_FIELDS = {"决定书作出日期", "官方发布日期", "第三方收录日期", "首次发现日期", "最后核验日期"}
@@ -309,7 +311,10 @@ def normalize_url(url: str) -> str:
                 query_items.append((key, val))
         from urllib.parse import urlencode
         query = urlencode(sorted(query_items), doseq=True)
-        return urlunparse((parsed.scheme.lower() or "https", host, path.rstrip("/") or "/", "", query, ""))
+        scheme = parsed.scheme.lower() or "https"
+        if scheme == "http" and host in HTTPS_UPGRADE_HOSTS:
+            scheme = "https"
+        return urlunparse((scheme, host, path.rstrip("/") or "/", "", query, ""))
     except Exception:
         return url
 
@@ -637,11 +642,11 @@ def detect_page_state(status_code: int | None, text: str, error: str) -> str:
     if status_code is None or status_code >= 500 or error:
         return "暂时无法访问"
     lowered = text.lower()
-    if any(token in lowered for token in ("页面不存在", "您访问的页面", "404 not found", "content not found")):
+    if any(doc_type in text for doc_type in DOC_TYPES):
+        return "正常"
+    if any(token in lowered for token in ("页面不存在", "您访问的页面不存在", "404 not found", "content not found")):
         return "页面已删除"
-    if not any(doc_type in text for doc_type in DOC_TYPES):
-        return "内容不匹配"
-    return "正常"
+    return "内容不匹配"
 
 
 def extract_binary_text(content: bytes, content_type: str, url: str) -> str:
@@ -666,19 +671,37 @@ def extract_binary_text(content: bytes, content_type: str, url: str) -> str:
     return ""
 
 
-def fetch_attachment(session: requests.Session, url: str, label: str) -> dict:
+def valid_attachment_content(content: bytes) -> bool:
+    """只接受实际 PDF/Word 文件，拒绝 HTTP 200 的防盗链提示页。"""
+    if content.startswith(b"%PDF") or content.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return True
+    if not content.startswith(b"PK\x03\x04"):
+        return False
+    try:
+        with zipfile.ZipFile(io.BytesIO(content)) as archive:
+            return any(name.startswith("word/") for name in archive.namelist())
+    except zipfile.BadZipFile:
+        return False
+
+
+def fetch_attachment(session: requests.Session, url: str, label: str, referer: str = "") -> dict:
     item = {"url": normalize_url(url), "label": clean_text(label), "ok": False, "text": "", "state": "暂时无法访问"}
     try:
-        response = session.get(url, timeout=(8, 28), allow_redirects=True)
+        headers = {"Referer": referer} if referer else None
+        response = session.get(url, headers=headers, timeout=(8, 28), allow_redirects=True)
         content = response.content[:25 * 1024 * 1024]
         content_type = response.headers.get("Content-Type", "").split(";")[0].lower()
+        attachment_ok = response.ok and valid_attachment_content(content)
         item.update({
             "url": normalize_url(response.url),
-            "ok": response.ok and len(content) > 20,
-            "text": extract_binary_text(content, content_type, response.url),
-            "state": "附件正常" if response.ok and len(content) > 20 else detect_page_state(response.status_code, "", ""),
+            "ok": attachment_ok,
+            "text": extract_binary_text(content, content_type, response.url) if attachment_ok else "",
+            "state": "附件正常" if attachment_ok else detect_page_state(response.status_code, "", ""),
             "status_code": response.status_code,
         })
+        if response.ok and not attachment_ok:
+            item["state"] = "需要人工核验"
+            item["error"] = "附件地址返回的不是可验证的 PDF/Word 文件"
     except requests.RequestException as exc:
         item["error"] = f"{type(exc).__name__}: {exc}"
     return item
@@ -718,7 +741,10 @@ def fetch_candidate(hit: SearchHit) -> FetchResult:
             # 只核验与目标文书相关的前 12 个附件，防止栏目页包含大量无关下载。
             selected = list(attachment_links.items())[:12]
             with ThreadPoolExecutor(max_workers=4) as executor:
-                futures = [executor.submit(fetch_attachment, session, url, label) for url, label in selected]
+                futures = [
+                    executor.submit(fetch_attachment, session, url, label, response.url)
+                    for url, label in selected
+                ]
                 for future in as_completed(futures):
                     attachments.append(future.result())
             text = body
@@ -727,7 +753,7 @@ def fetch_candidate(hit: SearchHit) -> FetchResult:
             if not title:
                 title = Path(urlparse(final_url).path).name
         state = detect_page_state(response.status_code, text, "")
-        if state == "正常" and any(att.get("ok") for att in attachments):
+        if any(att.get("ok") for att in attachments):
             state = "附件正常"
         return FetchResult(
             hit.url, final_url, response.ok, response.status_code, content_type, content,
@@ -1050,7 +1076,8 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
         if published < date(2026, 1, 1):
             audit["skip_reason"] = "发布日期早于 2026-01-01"
             return [], audit
-        if not full_run and published < start_date:
+        is_historical_revalidation = hit.query == "pending-or-invalid"
+        if not full_run and not is_historical_revalidation and published < start_date:
             audit["skip_reason"] = "不在本次增量时间窗"
             return [], audit
 
@@ -1109,7 +1136,7 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
             completeness = "完整文书" if has_detail else "仅公告送达/仅文号线索"
             verified = "已核验" if level != "第三方待核验" and fetched.state in NORMAL_STATES else "待核验"
             page_state = fetched.state
-            if attachment_ok and page_state == "正常":
+            if attachment_ok:
                 page_state = "附件正常"
 
             official_link = fetched.final_url if level != "第三方待核验" else ""
@@ -1346,6 +1373,10 @@ def merge_record(existing: dict, incoming: dict) -> tuple[dict, bool]:
 
 def sanitize_record(record: dict) -> None:
     """清除无法由明确标签支持的地域/主体字段，不用上下文猜测补值。"""
+    for field_name in ("官方原文链接", "附件链接", "备用来源链接"):
+        links = [normalize_url(item) for item in clean_text(record.get(field_name)).split(";") if clean_text(item)]
+        record[field_name] = ";".join(dict.fromkeys(link for link in links if link))
+
     title = clean_text(record.get("页面标题"))
     agency = clean_text(record.get("发布机关"))
     inspection = clean_text(record.get("稽查机构"))
@@ -1477,7 +1508,7 @@ def write_csv(path: Path, records: list[dict]) -> None:
     # 临时文件仍保留 .xlsx 扩展名，确保 openpyxl 能重新打开执行替换前校验。
     temp = path.with_name(f"{path.stem}.tmp{path.suffix}")
     with temp.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=FIELDS, extrasaction="ignore")
+        writer = csv.DictWriter(handle, fieldnames=FIELDS, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         for record in records:
             row = {}
@@ -1759,7 +1790,8 @@ def main() -> int:
         historical_hits = historical_revalidation_hits(existing_xlsx or existing_csv)
         deduped_hits = {hit.url: hit for hit in hits}
         for hit in historical_hits:
-            deduped_hits.setdefault(hit.url, hit)
+            # 历史失效/待核验记录必须覆盖普通发现元数据，确保不受增量日期窗口过滤。
+            deduped_hits[hit.url] = hit
         hits = list(deduped_hits.values())
         if args.max_pages:
             hits = hits[:args.max_pages]

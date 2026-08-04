@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, FileText, Link2, Scale } from "lucide-react";
+import { Download, ExternalLink, FileText, Link2, Scale } from "lucide-react";
 import { DocumentTypeBadge, VerificationBadge } from "@/components/decision-badges";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +10,7 @@ import {
   formatMoney,
   isOfficialGovernmentUrl,
   moneyFields,
+  type LinkFallbackEntry,
   type TaxDecision,
 } from "@/lib/tax-decisions";
 
@@ -34,16 +35,21 @@ const fieldRows: Array<[keyof TaxDecision, string]> = [
 
 export function DecisionDetailSheet({
   decision,
+  attachmentFallback,
   open,
   onOpenChange,
 }: {
   decision: TaxDecision | null;
+  attachmentFallback?: LinkFallbackEntry;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
   if (!decision) return null;
   const official = isOfficialGovernmentUrl(decision.officialUrl);
   const sourceUrl = decision.officialUrl ?? decision.backupUrl;
+  const stableDocumentUrl =
+    attachmentFallback?.cachedUrl ??
+    (attachmentFallback?.status === "unavailable" ? null : decision.attachmentUrl);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -117,18 +123,44 @@ export function DecisionDetailSheet({
               <MetaLine label="页面标题" value={decision.pageTitle} />
               <MetaLine label="备注" value={decision.notes} />
             </div>
-            {sourceUrl ? (
-              <Button asChild className="mt-4 w-full bg-blue-700 hover:bg-blue-800">
-                <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-                  {official ? "打开官方原文" : "打开来源页面"}
-                  <ExternalLink className="size-4" />
-                </a>
-              </Button>
+            {sourceUrl || stableDocumentUrl ? (
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {sourceUrl ? (
+                  <Button
+                    asChild
+                    className={stableDocumentUrl ? "" : "bg-blue-700 hover:bg-blue-800 sm:col-span-2"}
+                    variant={stableDocumentUrl ? "outline" : "default"}
+                  >
+                    <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                      {official ? "打开官方原文" : "打开来源页面"}
+                      <ExternalLink className="size-4" />
+                    </a>
+                  </Button>
+                ) : null}
+                {stableDocumentUrl ? (
+                  <Button asChild className="bg-blue-700 hover:bg-blue-800">
+                    <a href={stableDocumentUrl} target="_blank" rel="noopener noreferrer">
+                      {attachmentFallback?.cachedUrl ? "打开文书备份" : "打开官方附件"}
+                      <Download className="size-4" />
+                    </a>
+                  </Button>
+                ) : null}
+              </div>
             ) : (
               <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
                 当前记录暂无可访问的原文链接，已保留历史信息并等待再次核验。
               </div>
             )}
+            {attachmentFallback?.cachedUrl ? (
+              <p className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-xs leading-5 text-emerald-800">
+                文书备份由系统从官方地址核验下载；官网临时无法访问时，可使用该稳定入口。官方原始链接仍保留。
+              </p>
+            ) : null}
+            {attachmentFallback?.status === "unavailable" ? (
+              <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
+                官方附件本次暂时无法建立稳定备份，请从官方原文页面进入附件，系统将在下次运行时继续复核。
+              </p>
+            ) : null}
           </section>
         </div>
       </SheetContent>

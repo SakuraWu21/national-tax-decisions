@@ -64,6 +64,25 @@ export type UpdateStatus = {
   message: string;
 };
 
+export type LinkFallbackEntry = {
+  originalUrl: string;
+  sourcePageUrl: string | null;
+  linkType: "attachment" | "official_document";
+  status: "cached" | "cached_previous" | "unavailable";
+  checkedAt: string;
+  statusCode: number | null;
+  contentType: string | null;
+  cachedUrl: string | null;
+  sha256: string | null;
+  bytes: number | null;
+  message: string;
+};
+
+export type LinkFallbackManifest = {
+  generatedAt: string;
+  attachments: Record<string, LinkFallbackEntry>;
+};
+
 export type Filters = {
   query: string;
   documentType: string;

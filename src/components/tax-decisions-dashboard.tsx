@@ -39,11 +39,14 @@ import {
   isOfficialGovernmentUrl,
   majorAmount,
   type Filters,
+  type LinkFallbackEntry,
+  type LinkFallbackManifest,
   type TaxDecision,
   type UpdateStatus,
 } from "@/lib/tax-decisions";
 
 const filterKeys = Object.keys(defaultFilters) as Array<keyof Filters>;
+const emptyLinkFallbacks: LinkFallbackManifest = { generatedAt: "", attachments: {} };
 
 function filtersFromParams(params: URLSearchParams): Filters {
   return filterKeys.reduce(
@@ -81,6 +84,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
       : new URLSearchParams(window.location.search);
   const [records, setRecords] = useState<TaxDecision[]>([]);
   const [status, setStatus] = useState<UpdateStatus | null>(null);
+  const [linkFallbacks, setLinkFallbacks] = useState<LinkFallbackManifest>(emptyLinkFallbacks);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(true);
   const [error, setError] = useState("");
@@ -114,10 +118,20 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
         if (!response.ok) throw new Error("无法读取更新状态");
         return response.json() as Promise<UpdateStatus>;
       }),
+      fetch(`/data/link-fallbacks.json?v=${version}`, {
+        cache: "no-store",
+        headers: { Pragma: "no-cache" },
+        signal: controller.signal,
+      })
+        .then((response) =>
+          response.ok ? (response.json() as Promise<LinkFallbackManifest>) : emptyLinkFallbacks,
+        )
+        .catch(() => emptyLinkFallbacks),
     ])
-      .then(([nextRecords, nextStatus]) => {
+      .then(([nextRecords, nextStatus, nextLinkFallbacks]) => {
         setRecords(nextRecords);
         setStatus(nextStatus);
+        setLinkFallbacks(nextLinkFallbacks);
       })
       .catch((reason: unknown) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
@@ -467,7 +481,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
                         <TableHead className="w-32 text-right">主要金额</TableHead>
                         <TableHead className="w-32">公开完整度</TableHead>
                         <TableHead className="w-32">核验状态</TableHead>
-                        <TableHead className="w-32 text-right">原文</TableHead>
+                        <TableHead className="w-48 text-right">来源与附件</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -507,16 +521,10 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
                             <VerificationBadge status={record.verificationStatus} pageStatus={record.pageStatus} />
                           </TableCell>
                           <TableCell className="text-right">
-                            {record.officialUrl ? (
-                              <Button asChild size="sm" variant="ghost" onClick={(event) => event.stopPropagation()}>
-                                <a href={record.officialUrl} target="_blank" rel="noopener noreferrer">
-                                  {isOfficialGovernmentUrl(record.officialUrl) ? "官方原文" : "来源页面"}
-                                  <ExternalLink className="size-3.5" />
-                                </a>
-                              </Button>
-                            ) : (
-                              <span className="text-xs text-slate-400">暂不可用</span>
-                            )}
+                            <DecisionSourceLinks
+                              fallback={linkFallbacks.attachments[record.id]}
+                              record={record}
+                            />
                           </TableCell>
                         </TableRow>
                       ))}
@@ -560,14 +568,10 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
                           <Button size="sm" variant="ghost" onClick={() => setSelected(record)}>
                             查看详情
                           </Button>
-                          {record.officialUrl && (
-                            <Button asChild size="sm" variant="outline">
-                              <a href={record.officialUrl} target="_blank" rel="noopener noreferrer">
-                                {isOfficialGovernmentUrl(record.officialUrl) ? "官方原文" : "来源页面"}
-                                <ExternalLink className="size-3.5" />
-                              </a>
-                            </Button>
-                          )}
+                          <DecisionSourceLinks
+                            fallback={linkFallbacks.attachments[record.id]}
+                            record={record}
+                          />
                         </div>
                       </div>
                     </article>
@@ -621,6 +625,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
       </div>
 
       <DecisionDetailSheet
+        attachmentFallback={selected ? linkFallbacks.attachments[selected.id] : undefined}
         decision={selected}
         open={Boolean(selected)}
         onOpenChange={(open) => {
@@ -628,6 +633,39 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
         }}
       />
     </main>
+  );
+}
+
+function DecisionSourceLinks({
+  fallback,
+  record,
+}: {
+  fallback?: LinkFallbackEntry;
+  record: TaxDecision;
+}) {
+  const documentUrl = fallback?.cachedUrl ?? (fallback?.status === "unavailable" ? null : record.attachmentUrl);
+  if (!record.officialUrl && !documentUrl) {
+    return <span className="text-xs text-slate-400">暂不可用</span>;
+  }
+  return (
+    <div className="flex flex-wrap justify-end gap-1" onClick={(event) => event.stopPropagation()}>
+      {documentUrl ? (
+        <Button asChild size="sm" variant={fallback?.cachedUrl ? "secondary" : "outline"}>
+          <a href={documentUrl} target="_blank" rel="noopener noreferrer">
+            {fallback?.cachedUrl ? "稳定附件" : "文书附件"}
+            <Download className="size-3.5" />
+          </a>
+        </Button>
+      ) : null}
+      {record.officialUrl ? (
+        <Button asChild size="sm" variant="ghost">
+          <a href={record.officialUrl} target="_blank" rel="noopener noreferrer">
+            {isOfficialGovernmentUrl(record.officialUrl) ? "官网" : "来源"}
+            <ExternalLink className="size-3.5" />
+          </a>
+        </Button>
+      ) : null}
+    </div>
   );
 }
 
