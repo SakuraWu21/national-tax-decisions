@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -18,6 +19,7 @@ CSV = ROOT / "data" / "全国税务处理及行政处罚决定书汇总.csv"
 SHEETS = ["文书汇总", "完整文书", "公告送达及文号线索", "待核验记录", "失效链接", "每日运行日志"]
 PUBLIC_JSON = ROOT / "public" / "data" / "tax-decisions.json"
 PUBLIC_STATUS = ROOT / "public" / "data" / "update-status.json"
+PUBLIC_LINK_FALLBACKS = ROOT / "public" / "data" / "link-fallbacks.json"
 PUBLIC_XLSX = ROOT / "public" / "downloads" / XLSX.name
 PUBLIC_CSV = ROOT / "public" / "downloads" / CSV.name
 SCHEMA = ROOT / "config" / "tax-decisions.schema.json"
@@ -50,7 +52,7 @@ def main() -> int:
         csv_rows = list(csv.DictReader(handle))
     if len(records) != len(csv_rows):
         fail(f"Excel/CSV 数量不一致：{len(records)} != {len(csv_rows)}")
-    for path in (PUBLIC_JSON, PUBLIC_STATUS, PUBLIC_XLSX, PUBLIC_CSV, SCHEMA):
+    for path in (PUBLIC_JSON, PUBLIC_STATUS, PUBLIC_LINK_FALLBACKS, PUBLIC_XLSX, PUBLIC_CSV, SCHEMA):
         if not path.exists():
             fail(f"前端交付文件不存在：{path}")
     public_rows = json.loads(PUBLIC_JSON.read_text(encoding="utf-8"))
@@ -68,6 +70,30 @@ def main() -> int:
         fail("update-status.json 总数与记录数量不一致")
     if PUBLIC_XLSX.read_bytes() != XLSX.read_bytes() or PUBLIC_CSV.read_bytes() != CSV.read_bytes():
         fail("公开下载文件与数据源文件不一致")
+
+    fallback_manifest = json.loads(PUBLIC_LINK_FALLBACKS.read_text(encoding="utf-8"))
+    fallback_entries = fallback_manifest.get("attachments", {})
+    if not isinstance(fallback_entries, dict):
+        fail("link-fallbacks.json 格式不正确")
+    unknown_fallback_ids = set(fallback_entries) - set(public_ids)
+    if unknown_fallback_ids:
+        fail(f"附件备份清单包含未知文书ID：{sorted(unknown_fallback_ids)[:3]}")
+    cached_fallbacks = 0
+    for record_id, entry in fallback_entries.items():
+        cached_url = entry.get("cachedUrl")
+        if not cached_url:
+            continue
+        if not str(cached_url).startswith("/official-attachments/"):
+            fail(f"附件备份路径不安全：{record_id}")
+        cached_path = ROOT / "public" / str(cached_url).removeprefix("/")
+        if not cached_path.is_file():
+            fail(f"附件备份文件不存在：{cached_path}")
+        content = cached_path.read_bytes()
+        if entry.get("bytes") != len(content):
+            fail(f"附件备份大小不一致：{record_id}")
+        if entry.get("sha256") != hashlib.sha256(content).hexdigest():
+            fail(f"附件备份校验值不一致：{record_id}")
+        cached_fallbacks += 1
 
     ids = [str(record["文书唯一ID"]) for record in records]
     if len(ids) != len(set(ids)):
@@ -113,6 +139,8 @@ def main() -> int:
         "json_records": len(public_rows),
         "json_schema_valid": True,
         "download_files_match": True,
+        "link_fallback_records": len(fallback_entries),
+        "cached_official_files": cached_fallbacks,
         "paired_case_groups": paired_groups,
         "pending_records": sum(1 for record in records if record["核验状态"] == "待核验"),
         "invalid_link_records": sum(1 for record in records if record["页面当前状态"] not in ("正常", "附件正常")),

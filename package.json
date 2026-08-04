@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "cache:links": ".venv/Scripts/python.exe scripts/cache_official_attachments.py",
     "test:data": ".venv/Scripts/python.exe scripts/verify_system.py"
   },
   "dependencies": {
