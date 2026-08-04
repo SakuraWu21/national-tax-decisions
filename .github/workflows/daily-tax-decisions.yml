@@ -2,9 +2,8 @@ name: 全国税务决定书每日更新
 
 on:
   schedule:
-    # GitHub Actions 使用 UTC；北京时间 12:00 = UTC 04:00。
-    # GitHub 的 schedule 可能有数分钟排队延迟。
-    - cron: "0 4 * * *"
+    # 避开每小时整点的 GitHub Actions 高峰；北京时间 12:07 = UTC 04:07。
+    - cron: "7 4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -21,7 +20,7 @@ jobs:
     env:
       TZ: Asia/Shanghai
       PYTHONUTF8: "1"
-      VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+      SITE_URL: https://national-tax-decisions.vercel.app
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,9 +43,11 @@ jobs:
         run: python scripts/verify_system.py
 
       - name: Commit changed data
+        id: commit
         run: |
           if git diff --quiet -- data public/data public/downloads; then
             echo "No generated file changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -60,17 +61,34 @@ jobs:
             public/downloads/全国税务处理及行政处罚决定书汇总.csv
           git commit -m "data: update tax decisions $(date +%F)"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Optional Vercel deploy hook
-        if: ${{ env.VERCEL_DEPLOY_HOOK != '' }}
-        run: curl --fail --silent --show-error --request POST "$VERCEL_DEPLOY_HOOK"
+      - name: Verify Vercel production data
+        if: ${{ steps.commit.outputs.changed == 'true' }}
+        run: |
+          expected=$(python -c 'import json; print(json.load(open("public/data/update-status.json", encoding="utf-8"))["lastUpdated"])')
+          for attempt in $(seq 1 40); do
+            live=$(curl --fail --silent --show-error \
+              --header "Cache-Control: no-cache" \
+              --header "Pragma: no-cache" \
+              "$SITE_URL/data/update-status.json?run=$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$attempt" \
+              | python -c 'import json, sys; print(json.load(sys.stdin).get("lastUpdated", ""))' 2>/dev/null || true)
+            if [ "$live" = "$expected" ]; then
+              echo "Production data verified: $live"
+              exit 0
+            fi
+            echo "Waiting for Vercel deployment ($attempt/40): live=$live expected=$expected"
+            sleep 15
+          done
+          echo "Vercel production did not expose the generated data within 10 minutes." >&2
+          exit 1
 
       - name: Write run summary
         if: always()
         run: |
           echo "## 全国税务决定书每日更新" >> "$GITHUB_STEP_SUMMARY"
-          echo "- 计划时间：北京时间每日 12:00（UTC 04:00）" >> "$GITHUB_STEP_SUMMARY"
-          echo "- 定时任务可能因 GitHub Actions 排队延迟数分钟。" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 计划时间：北京时间每日 12:07（UTC 04:07，避开整点高峰）" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 发布验收：数据提交后最长等待 10 分钟，确认生产站点 lastUpdated 与本次运行一致。" >> "$GITHUB_STEP_SUMMARY"
           if [ -f update-summary.log ]; then
             echo '```text' >> "$GITHUB_STEP_SUMMARY"
             tail -n 30 update-summary.log >> "$GITHUB_STEP_SUMMARY"

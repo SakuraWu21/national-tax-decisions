@@ -48,6 +48,7 @@ XLSX_PATH = DATA_DIR / "全国税务处理及行政处罚决定书汇总.xlsx"
 CSV_PATH = DATA_DIR / "全国税务处理及行政处罚决定书汇总.csv"
 AUDIT_PATH = DATA_DIR / "candidate_audit.jsonl"
 SEED_PATH = ROOT / "config" / "seed_urls.txt"
+OFFICIAL_INDEX_PATH = ROOT / "config" / "official_indexes.txt"
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
 PUBLIC_DOWNLOAD_DIR = ROOT / "public" / "downloads"
 PUBLIC_JSON_PATH = PUBLIC_DATA_DIR / "tax-decisions.json"
@@ -56,6 +57,9 @@ PUBLIC_XLSX_PATH = PUBLIC_DOWNLOAD_DIR / "全国税务处理及行政处罚决�
 PUBLIC_CSV_PATH = PUBLIC_DOWNLOAD_DIR / "全国税务处理及行政处罚决定书汇总.csv"
 
 TZ_NAME = "Asia/Shanghai"
+PUBLIC_SCHEDULE = "每日 12:07（北京时间）"
+RECENT_LOOKBACK_DAYS = 7
+OFFICIAL_INDEX_LOOKBACK_DAYS = 14
 RUN_NOW = datetime.now().astimezone()
 TODAY = RUN_NOW.date()
 
@@ -484,6 +488,76 @@ def load_seed_hits() -> list[SearchHit]:
     return hits
 
 
+def configured_official_indexes() -> list[str]:
+    if not OFFICIAL_INDEX_PATH.exists():
+        return []
+    return [
+        normalize_url(line)
+        for line in OFFICIAL_INDEX_PATH.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    ]
+
+
+def official_index_urls(records: list[dict]) -> list[str]:
+    """组合固定栏目与历史官方链接所属栏目，减少对搜索引擎收录速度的依赖。"""
+    urls = set(configured_official_indexes())
+    for record in records:
+        url = normalize_url(record.get("官方原文链接", ""))
+        if not is_official_url(url):
+            continue
+        parsed = urlparse(url)
+        # 常见税务站路径：栏目/YYYYMM/tYYYYMMDD_xxx.html。
+        index_path = re.sub(r"/20\d{4}/[^/]+$", "/", parsed.path)
+        if index_path == parsed.path:
+            continue
+        urls.add(urlunparse((parsed.scheme, parsed.netloc, index_path, "", "", "")))
+    return sorted(url for url in urls if url)
+
+
+def date_from_listing_url(url: str) -> date | None:
+    patterns = (
+        r"/(20\d{2})(\d{2})/t(20\d{2})(\d{2})(\d{2})_",
+        r"/(20\d{2})[-/](\d{1,2})[-/](\d{1,2})/",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if not match:
+            continue
+        groups = match.groups()
+        values = groups[-3:]
+        try:
+            return date(*map(int, values))
+        except ValueError:
+            continue
+    return None
+
+
+def discover_official_index(session: requests.Session, index_url: str) -> list[SearchHit]:
+    """直接扫描官方公告栏目中的近期文章链接。"""
+    response = session.get(index_url, timeout=(9, 28), allow_redirects=True)
+    response.raise_for_status()
+    response.encoding = response.apparent_encoding or response.encoding or "utf-8"
+    soup = BeautifulSoup(response.text, "lxml")
+    cutoff = TODAY - timedelta(days=OFFICIAL_INDEX_LOOKBACK_DAYS)
+    hits: dict[str, SearchHit] = {}
+    hints = (*DOC_TYPES, "税务文书送达公告", "公告送达", "稽查局")
+    for anchor in soup.find_all("a", href=True):
+        target = normalize_url(urljoin(response.url, anchor["href"]))
+        if not is_official_url(target) or target == normalize_url(response.url):
+            continue
+        label = clean_text(anchor.get_text(" ", strip=True) or anchor.get("title", ""))
+        context = clean_text(anchor.parent.get_text(" ", strip=True))[:240] if anchor.parent else label
+        listing_date = date_from_listing_url(target)
+        if listing_date and listing_date < cutoff:
+            continue
+        if not any(hint in f"{label} {context}" for hint in hints):
+            continue
+        hits[target] = SearchHit(target, label or context, "税务机关公告栏目", index_url)
+        if len(hits) >= 120:
+            break
+    return list(hits.values())
+
+
 def relevant_candidate(hit: SearchHit) -> bool:
     url = normalize_url(hit.url)
     if not url.startswith(("http://", "https://")):
@@ -500,7 +574,7 @@ def relevant_candidate(hit: SearchHit) -> bool:
     )
 
 
-def discover_candidates(full_run: bool, errors: list[str]) -> list[SearchHit]:
+def discover_candidates(full_run: bool, errors: list[str], existing_records: list[dict]) -> list[SearchHit]:
     queries = SEARCH_QUERIES_FULL if full_run else SEARCH_QUERIES_RECENT
     hits = load_seed_hits()
     tasks: list[tuple] = []
@@ -510,6 +584,8 @@ def discover_candidates(full_run: bool, errors: list[str]) -> list[SearchHit]:
         # 第二个独立搜索引擎；错开请求，避免给公开服务造成突发压力。
         if index % 2 == 0:
             tasks.append((discover_baidu, query))
+    for index_url in official_index_urls(existing_records):
+        tasks.append((discover_official_index, index_url))
 
     # 搜索入口彼此独立，可并行；每个任务使用自己的会话，避免跨线程共享连接状态。
     with ThreadPoolExecutor(max_workers=8) as executor:
@@ -1593,7 +1669,7 @@ def write_public_artifacts(records: list[dict], log_entry: dict) -> None:
         "status": "normal" if log_entry["运行是否成功"] == "成功" else "degraded",
         "lastUpdated": log_entry["运行日期和时间"],
         "timezone": TZ_NAME,
-        "nextScheduledUpdate": "每日 12:00",
+        "nextScheduledUpdate": PUBLIC_SCHEDULE,
         "searchRange": log_entry["检索时间范围"],
         "searchedPages": log_entry["检索页面数量"],
         "total": len(public_records),
@@ -1667,7 +1743,7 @@ def main() -> int:
     elif full_run:
         start_date = date(2026, 1, 1)
     else:
-        start_date = TODAY - timedelta(days=3)
+        start_date = TODAY - timedelta(days=RECENT_LOOKBACK_DAYS)
     if start_date < date(2026, 1, 1):
         start_date = date(2026, 1, 1)
 
@@ -1679,7 +1755,7 @@ def main() -> int:
     hits: list[SearchHit] = []
     console(f"检索时间范围：{start_date.isoformat()} 至 {TODAY.isoformat()}（{TZ_NAME}）")
     try:
-        hits = discover_candidates(full_run, errors)
+        hits = discover_candidates(full_run, errors, existing_xlsx or existing_csv)
         historical_hits = historical_revalidation_hits(existing_xlsx or existing_csv)
         deduped_hits = {hit.url: hit for hit in hits}
         for hit in historical_hits:

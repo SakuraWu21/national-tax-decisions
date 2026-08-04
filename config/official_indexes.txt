@@ -1,0 +1,3 @@
+# 已确认会持续发布税务文书送达公告的官方栏目。
+# 程序还会从历史官方原文链接自动推导同类栏目，逐步扩大直扫范围。
+https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/
