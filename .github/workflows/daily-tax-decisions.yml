@@ -2,8 +2,9 @@ name: 全国税务决定书每日更新
 
 on:
   schedule:
-    # 避开每小时整点的 GitHub Actions 高峰；北京时间 12:07 = UTC 04:07。
+    # 主任务：北京时间 12:07 = UTC 04:07；补偿任务：北京时间 12:37 = UTC 04:37。
     - cron: "7 4 * * *"
+    - cron: "37 4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -58,8 +59,10 @@ jobs:
           git add data/全国税务处理及行政处罚决定书汇总.xlsx \
             data/全国税务处理及行政处罚决定书汇总.csv \
             data/candidate_audit.jsonl \
+            data/retry_queue.json \
             public/data/tax-decisions.json \
             public/data/update-status.json \
+            public/data/source-health.json \
             public/data/link-fallbacks.json \
             public/official-attachments \
             public/downloads/全国税务处理及行政处罚决定书汇总.xlsx \
@@ -67,17 +70,20 @@ jobs:
           git commit -m "data: update tax decisions $(date +%F)"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "data_commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Verify Vercel production data
         if: ${{ steps.commit.outputs.changed == 'true' }}
         run: |
-          expected=$(python -c 'import json; print(json.load(open("public/data/update-status.json", encoding="utf-8"))["lastUpdated"])')
+          expected_completed=$(python -c 'import json; print(json.load(open("public/data/update-status.json", encoding="utf-8"))["lastRunCompletedAt"])')
+          expected_commit="${{ steps.commit.outputs.data_commit }}"
           for attempt in $(seq 1 40); do
             live=$(curl --fail --silent --show-error \
               --header "Cache-Control: no-cache" \
               --header "Pragma: no-cache" \
               "$SITE_URL/data/update-status.json?run=$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$attempt" \
-              | python -c 'import json, sys; print(json.load(sys.stdin).get("lastUpdated", ""))' 2>/dev/null || true)
+              | python -c 'import json, sys; s=json.load(sys.stdin); print("|".join((s.get("sourceCommit", ""), s.get("lastRunCompletedAt", ""), s.get("deploymentStatus", ""))))' 2>/dev/null || true)
+            expected="$expected_commit|$expected_completed|deployed"
             if [ "$live" = "$expected" ]; then
               echo "Production data verified: $live"
               exit 0
@@ -92,8 +98,8 @@ jobs:
         if: always()
         run: |
           echo "## 全国税务决定书每日更新" >> "$GITHUB_STEP_SUMMARY"
-          echo "- 计划时间：北京时间每日 12:07（UTC 04:07，避开整点高峰）" >> "$GITHUB_STEP_SUMMARY"
-          echo "- 发布验收：数据提交后最长等待 10 分钟，确认生产站点 lastUpdated 与本次运行一致。" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 计划时间：北京时间每日 12:07 主任务、12:37 补偿任务（UTC 04:07、04:37）。" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 发布验收：数据提交后最长等待 10 分钟，确认生产站点 sourceCommit、lastRunCompletedAt 和 deploymentStatus 与本次运行一致。" >> "$GITHUB_STEP_SUMMARY"
           if [ -f update-summary.log ]; then
             echo '```text' >> "$GITHUB_STEP_SUMMARY"
             tail -n 30 update-summary.log >> "$GITHUB_STEP_SUMMARY"

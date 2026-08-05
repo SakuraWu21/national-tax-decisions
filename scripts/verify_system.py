@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -19,7 +20,9 @@ CSV = ROOT / "data" / "全国税务处理及行政处罚决定书汇总.csv"
 SHEETS = ["文书汇总", "完整文书", "公告送达及文号线索", "待核验记录", "失效链接", "每日运行日志"]
 PUBLIC_JSON = ROOT / "public" / "data" / "tax-decisions.json"
 PUBLIC_STATUS = ROOT / "public" / "data" / "update-status.json"
+PUBLIC_SOURCE_HEALTH = ROOT / "public" / "data" / "source-health.json"
 PUBLIC_LINK_FALLBACKS = ROOT / "public" / "data" / "link-fallbacks.json"
+RETRY_QUEUE = ROOT / "data" / "retry_queue.json"
 PUBLIC_XLSX = ROOT / "public" / "downloads" / XLSX.name
 PUBLIC_CSV = ROOT / "public" / "downloads" / CSV.name
 SCHEMA = ROOT / "config" / "tax-decisions.schema.json"
@@ -52,7 +55,10 @@ def main() -> int:
         csv_rows = list(csv.DictReader(handle))
     if len(records) != len(csv_rows):
         fail(f"Excel/CSV 数量不一致：{len(records)} != {len(csv_rows)}")
-    for path in (PUBLIC_JSON, PUBLIC_STATUS, PUBLIC_LINK_FALLBACKS, PUBLIC_XLSX, PUBLIC_CSV, SCHEMA):
+    for path in (
+        PUBLIC_JSON, PUBLIC_STATUS, PUBLIC_SOURCE_HEALTH, PUBLIC_LINK_FALLBACKS,
+        RETRY_QUEUE, PUBLIC_XLSX, PUBLIC_CSV, SCHEMA,
+    ):
         if not path.exists():
             fail(f"前端交付文件不存在：{path}")
     public_rows = json.loads(PUBLIC_JSON.read_text(encoding="utf-8"))
@@ -68,8 +74,37 @@ def main() -> int:
     status = json.loads(PUBLIC_STATUS.read_text(encoding="utf-8"))
     if status.get("total") != len(public_rows):
         fail("update-status.json 总数与记录数量不一致")
+    required_status_fields = {
+        "lastRunStartedAt", "lastRunCompletedAt", "lastSuccessfulRunAt", "lastDataChangeAt",
+        "sourceCommit", "workflowRunId", "searchedPages", "newRecords", "updatedRecords",
+        "failedSources", "deploymentStatus",
+    }
+    missing_status_fields = required_status_fields - set(status)
+    if missing_status_fields:
+        fail(f"update-status.json 缺少字段：{sorted(missing_status_fields)}")
+    if status.get("deploymentStatus") not in {"pending", "deployed", "local"}:
+        fail("update-status.json deploymentStatus 不合法")
+    if not isinstance(status.get("failedSources"), list):
+        fail("update-status.json failedSources 必须是数组")
     if PUBLIC_XLSX.read_bytes() != XLSX.read_bytes() or PUBLIC_CSV.read_bytes() != CSV.read_bytes():
         fail("公开下载文件与数据源文件不一致")
+
+    retry_payload = json.loads(RETRY_QUEUE.read_text(encoding="utf-8"))
+    retry_items = retry_payload.get("items", [])
+    if not isinstance(retry_items, list):
+        fail("retry_queue.json items 必须是数组")
+    retry_urls = [str(item.get("url", "")) for item in retry_items]
+    if len(retry_urls) != len(set(retry_urls)):
+        fail("retry_queue.json 存在重复链接")
+    if any(not url.startswith(("http://", "https://")) for url in retry_urls):
+        fail("retry_queue.json 包含无效链接")
+
+    source_health = json.loads(PUBLIC_SOURCE_HEALTH.read_text(encoding="utf-8"))
+    health_sources = source_health.get("sources", [])
+    required_sources = {"福建省", "河南省", "贵州省", "广西壮族自治区", "广东省", "江苏省", "浙江省"}
+    actual_sources = {item.get("source") for item in health_sources if isinstance(item, dict)}
+    if not required_sources <= actual_sources:
+        fail(f"source-health.json 缺少来源：{sorted(required_sources - actual_sources)}")
 
     fallback_manifest = json.loads(PUBLIC_LINK_FALLBACKS.read_text(encoding="utf-8"))
     fallback_entries = fallback_manifest.get("attachments", {})
@@ -104,6 +139,16 @@ def main() -> int:
     ]
     if len(type_numbers) != len(set(type_numbers)):
         fail("存在重复的文书类型+决定书文号")
+    redundant_conflict = re.compile(
+        r"字段“[^”]+”存在冲突:保留原值“(?P<old>.*?)”[，,]新值“(?P<new>.*?)”未静默覆盖。",
+        re.S,
+    )
+    for record in records:
+        for match in redundant_conflict.finditer(str(record.get("备注", ""))):
+            old = re.sub(r"\s+", " ", match.group("old")).strip()
+            new = re.sub(r"\s+", " ", match.group("new")).strip()
+            if old == new:
+                fail(f"存在仅由空白差异产生的伪冲突备注：{record['文书唯一ID']}")
 
     grouped: dict[str, list[dict]] = {}
     for record in records:
@@ -131,6 +176,8 @@ def main() -> int:
         fail("每日运行日志为空")
 
     last_log = {log_sheet.cell(1, col).value: log_sheet.cell(log_sheet.max_row, col).value for col in range(1, log_sheet.max_column + 1)}
+    if last_log.get("运行是否成功") != "成功":
+        fail("最后一次运行日志未标记成功")
     report = {
         "xlsx_opened": True,
         "excel_records": len(records),
@@ -142,6 +189,8 @@ def main() -> int:
         "link_fallback_records": len(fallback_entries),
         "cached_official_files": cached_fallbacks,
         "paired_case_groups": paired_groups,
+        "retry_queue_records": len(retry_items),
+        "source_health_records": len(health_sources),
         "pending_records": sum(1 for record in records if record["核验状态"] == "待核验"),
         "invalid_link_records": sum(1 for record in records if record["页面当前状态"] not in ("正常", "附件正常")),
         "log_rows": log_sheet.max_row - 1,
