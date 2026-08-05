@@ -26,6 +26,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          # 排队的补偿任务必须在真正开始时读取最新 master，不能使用事件创建时冻结的旧 SHA。
+          ref: master
           fetch-depth: 0
 
       - name: Set up Python
