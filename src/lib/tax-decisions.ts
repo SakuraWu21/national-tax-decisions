@@ -46,6 +46,14 @@ export type TaxDecision = {
 export type UpdateStatus = {
   status: "normal" | "degraded";
   lastUpdated: string;
+  lastRunStartedAt: string;
+  lastRunCompletedAt: string;
+  lastSuccessfulRunAt: string;
+  lastDataChangeAt: string;
+  lastProductionDeploymentAt: string | null;
+  sourceCommit: string;
+  workflowRunId: string;
+  deploymentStatus: "pending" | "deployed" | "local";
   timezone: string;
   nextScheduledUpdate: string;
   searchRange: string;
@@ -58,8 +66,10 @@ export type UpdateStatus = {
   invalidLinks: number;
   newCompleteDocuments: number;
   newClues: number;
+  newRecords: number;
   updatedRecords: number;
   duplicateRecords: number;
+  failedSources: string[];
   runSuccess: boolean;
   message: string;
 };

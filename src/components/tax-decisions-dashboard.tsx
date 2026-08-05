@@ -89,6 +89,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
   const [refreshing, setRefreshing] = useState(true);
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
+  const [freshnessCheckedAt, setFreshnessCheckedAt] = useState(() => Date.now());
   const [filters, setFilters] = useState<Filters>(() => filtersFromParams(initialSearchParams));
   const [queryInput, setQueryInput] = useState(() => initialSearchParams.get("query") ?? "");
   const [page, setPage] = useState(() => Math.max(1, Number(initialSearchParams.get("page") ?? 1) || 1));
@@ -100,38 +101,45 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
 
   useEffect(() => {
     const controller = new AbortController();
-    const version = Date.now();
-    Promise.all([
-      fetch(`/data/tax-decisions.json?v=${version}`, {
-        cache: "no-store",
-        headers: { Pragma: "no-cache" },
-        signal: controller.signal,
-      }).then((response) => {
-        if (!response.ok) throw new Error("无法读取文书数据");
-        return response.json() as Promise<TaxDecision[]>;
-      }),
-      fetch(`/data/update-status.json?v=${version}`, {
-        cache: "no-store",
-        headers: { Pragma: "no-cache" },
-        signal: controller.signal,
-      }).then((response) => {
+    const requestedAt = Date.now();
+    fetch(`/data/update-status.json?v=${requestedAt}`, {
+      cache: "no-store",
+      headers: { Pragma: "no-cache" },
+      signal: controller.signal,
+    })
+      .then((response) => {
         if (!response.ok) throw new Error("无法读取更新状态");
         return response.json() as Promise<UpdateStatus>;
-      }),
-      fetch(`/data/link-fallbacks.json?v=${version}`, {
-        cache: "no-store",
-        headers: { Pragma: "no-cache" },
-        signal: controller.signal,
       })
-        .then((response) =>
-          response.ok ? (response.json() as Promise<LinkFallbackManifest>) : emptyLinkFallbacks,
-        )
-        .catch(() => emptyLinkFallbacks),
-    ])
+      .then((nextStatus) => {
+        const version = encodeURIComponent(`${nextStatus.sourceCommit}-${requestedAt}`);
+        return Promise.all([
+          fetch(`/data/tax-decisions.json?v=${version}`, {
+            cache: "no-store",
+            headers: { Pragma: "no-cache" },
+            signal: controller.signal,
+          }).then((response) => {
+            if (!response.ok) throw new Error("无法读取文书数据");
+            return response.json() as Promise<TaxDecision[]>;
+          }),
+          Promise.resolve(nextStatus),
+          fetch(`/data/link-fallbacks.json?v=${version}`, {
+            cache: "no-store",
+            headers: { Pragma: "no-cache" },
+            signal: controller.signal,
+          })
+            .then((response) =>
+              response.ok ? (response.json() as Promise<LinkFallbackManifest>) : emptyLinkFallbacks,
+            )
+            .catch(() => emptyLinkFallbacks),
+        ]);
+      })
       .then(([nextRecords, nextStatus, nextLinkFallbacks]) => {
         setRecords(nextRecords);
         setStatus(nextStatus);
         setLinkFallbacks(nextLinkFallbacks);
+        setFreshnessCheckedAt(Date.now());
+        setError("");
       })
       .catch((reason: unknown) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
@@ -155,10 +163,13 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
     const handleVisibility = () => {
       if (document.visibilityState === "visible") refresh();
     };
+    const handleFocus = () => refresh();
     document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleFocus);
     return () => {
       window.clearInterval(interval);
       document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleFocus);
     };
   }, []);
 
@@ -281,6 +292,12 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
     { label: "公告送达及文号线索", value: status.clues, icon: FileSearch, note: "保留可核验线索" },
     { label: "待核验", value: status.pending, icon: AlertCircle, note: "持续复核来源" },
   ];
+  const lastSuccessfulTimestamp = Date.parse(status.lastSuccessfulRunAt);
+  const updateDelayed =
+    Number.isFinite(lastSuccessfulTimestamp)
+    && freshnessCheckedAt - lastSuccessfulTimestamp > 26 * 60 * 60 * 1000;
+  const statusDegraded = status.status === "degraded" || updateDelayed;
+  const dataVersion = status.sourceCommit || status.lastUpdated;
 
   return (
     <main className="min-h-screen bg-[#f5f7fb]">
@@ -300,20 +317,25 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
                 <span
                   className={`inline-flex items-center gap-1.5 font-medium ${
-                    status.status === "normal" ? "text-emerald-700" : "text-amber-700"
+                    statusDegraded ? "text-amber-700" : "text-emerald-700"
                   }`}
                 >
                   <span
                     className={`size-2 rounded-full ring-4 ${
-                      status.status === "normal"
-                        ? "bg-emerald-500 ring-emerald-100"
-                        : "bg-amber-500 ring-amber-100"
+                      statusDegraded
+                        ? "bg-amber-500 ring-amber-100"
+                        : "bg-emerald-500 ring-emerald-100"
                     }`}
                   />
-                  {status.status === "normal" ? "数据正常" : "部分来源待恢复"}
+                  {updateDelayed ? "自动更新延迟" : status.status === "normal" ? "数据正常" : "部分来源待恢复"}
                 </span>
-                <span>最后更新：{formatDateTime(status.lastUpdated)}</span>
-                <span>{status.nextScheduledUpdate}自动更新</span>
+                <span>最近成功检索：{formatDateTime(status.lastSuccessfulRunAt)}</span>
+                <span>
+                  最近生产部署：
+                  {status.lastProductionDeploymentAt ? formatDateTime(status.lastProductionDeploymentAt) : "等待首次部署"}
+                </span>
+                <span>数据版本：{status.sourceCommit.slice(0, 8)}</span>
+                <span>下次计划：{status.nextScheduledUpdate}</span>
                 <Button
                   aria-label="立即刷新数据"
                   className="h-7 gap-1 px-2 text-xs"
@@ -338,7 +360,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
               <>
                 <Button asChild className="bg-blue-700 hover:bg-blue-800">
                   <a
-                    href={`/downloads/全国税务处理及行政处罚决定书汇总.xlsx?v=${encodeURIComponent(status.lastUpdated)}`}
+                    href={`/downloads/全国税务处理及行政处罚决定书汇总.xlsx?v=${encodeURIComponent(dataVersion)}`}
                     download
                   >
                     <Download className="size-4" />
@@ -347,7 +369,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
                 </Button>
                 <Button asChild variant="outline">
                   <a
-                    href={`/downloads/全国税务处理及行政处罚决定书汇总.csv?v=${encodeURIComponent(status.lastUpdated)}`}
+                    href={`/downloads/全国税务处理及行政处罚决定书汇总.csv?v=${encodeURIComponent(dataVersion)}`}
                     download
                   >
                     <Download className="size-4" />
@@ -366,6 +388,15 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
       </header>
 
       <div className="mx-auto max-w-[1520px] space-y-5 px-4 py-5 sm:px-6 lg:px-8">
+        {updateDelayed && (
+          <Alert className="border-amber-300 bg-amber-50 text-amber-950">
+            <AlertCircle className="size-4 text-amber-700" />
+            <AlertTitle>自动更新已延迟，系统正在重试。</AlertTitle>
+            <AlertDescription>
+              最近成功检索时间：{formatDateTime(status.lastSuccessfulRunAt)}。历史数据仍可正常查询与下载。
+            </AlertDescription>
+          </Alert>
+        )}
         <section className="grid grid-cols-2 gap-3 lg:grid-cols-5">
           {statCards.map((item) => (
             <Card key={item.label} className="border-slate-200 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">

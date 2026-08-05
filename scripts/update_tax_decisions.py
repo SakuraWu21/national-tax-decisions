@@ -18,6 +18,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import time
 import unicodedata
@@ -48,17 +49,19 @@ DATA_DIR = ROOT / "data"
 XLSX_PATH = DATA_DIR / "全国税务处理及行政处罚决定书汇总.xlsx"
 CSV_PATH = DATA_DIR / "全国税务处理及行政处罚决定书汇总.csv"
 AUDIT_PATH = DATA_DIR / "candidate_audit.jsonl"
+RETRY_QUEUE_PATH = DATA_DIR / "retry_queue.json"
 SEED_PATH = ROOT / "config" / "seed_urls.txt"
 OFFICIAL_INDEX_PATH = ROOT / "config" / "official_indexes.txt"
 PUBLIC_DATA_DIR = ROOT / "public" / "data"
 PUBLIC_DOWNLOAD_DIR = ROOT / "public" / "downloads"
 PUBLIC_JSON_PATH = PUBLIC_DATA_DIR / "tax-decisions.json"
 PUBLIC_STATUS_PATH = PUBLIC_DATA_DIR / "update-status.json"
+PUBLIC_SOURCE_HEALTH_PATH = PUBLIC_DATA_DIR / "source-health.json"
 PUBLIC_XLSX_PATH = PUBLIC_DOWNLOAD_DIR / "全国税务处理及行政处罚决定书汇总.xlsx"
 PUBLIC_CSV_PATH = PUBLIC_DOWNLOAD_DIR / "全国税务处理及行政处罚决定书汇总.csv"
 
 TZ_NAME = "Asia/Shanghai"
-PUBLIC_SCHEDULE = "每日 12:07（北京时间）"
+PUBLIC_SCHEDULE = "每日 12:07 主任务；12:37 补偿任务（北京时间）"
 RECENT_LOOKBACK_DAYS = 7
 OFFICIAL_INDEX_LOOKBACK_DAYS = 14
 RUN_NOW = datetime.now().astimezone()
@@ -163,6 +166,7 @@ DOMAIN_PROVINCES = {
     "gansu": "甘肃省", "qinghai": "青海省", "ningxia": "宁夏回族自治区",
     "xinjiang": "新疆维吾尔自治区",
 }
+CORE_SOURCE_PROVINCES = ("福建省", "河南省", "贵州省", "广西壮族自治区", "广东省", "江苏省", "浙江省")
 
 TAX_NAMES = [
     "增值税", "企业所得税", "个人所得税", "消费税", "城市维护建设税", "城建税",
@@ -245,12 +249,14 @@ def console(message: str) -> None:
 def new_session() -> requests.Session:
     session = requests.Session()
     retry = Retry(
-        total=2,
-        connect=2,
-        read=2,
-        backoff_factor=0.7,
+        total=3,
+        connect=3,
+        read=3,
+        status=3,
+        backoff_factor=1.0,
         status_forcelist=(429, 500, 502, 503, 504),
         allowed_methods=("GET", "HEAD"),
+        respect_retry_after_header=True,
     )
     session.mount("https://", HTTPAdapter(max_retries=retry, pool_connections=20, pool_maxsize=20))
     session.mount("http://", HTTPAdapter(max_retries=retry, pool_connections=20, pool_maxsize=20))
@@ -579,7 +585,35 @@ def relevant_candidate(hit: SearchHit) -> bool:
     )
 
 
-def discover_candidates(full_run: bool, errors: list[str], existing_records: list[dict]) -> list[SearchHit]:
+def hit_priority(hit: SearchHit) -> int:
+    """失败复核优先于官方栏目，官方栏目优先于搜索引擎。"""
+    if hit.query == "retry-queue":
+        return 40
+    if hit.query == "pending-or-invalid":
+        return 30
+    if hit.provider in {"税务机关公告栏目", "固定官方入口"}:
+        return 20
+    return 10
+
+
+def merge_search_hits(*hit_groups: Iterable[SearchHit]) -> list[SearchHit]:
+    merged: dict[str, SearchHit] = {}
+    for hit in (item for group in hit_groups for item in group):
+        hit.url = normalize_url(hit.url)
+        if not relevant_candidate(hit):
+            continue
+        current = merged.get(hit.url)
+        if current is None or hit_priority(hit) > hit_priority(current):
+            merged[hit.url] = hit
+    return sorted(merged.values(), key=lambda item: (-hit_priority(item), item.url))
+
+
+def discover_candidates(
+    full_run: bool,
+    errors: list[str],
+    existing_records: list[dict],
+    discovery_audits: list[dict] | None = None,
+) -> list[SearchHit]:
     queries = SEARCH_QUERIES_FULL if full_run else SEARCH_QUERIES_RECENT
     hits = load_seed_hits()
     tasks: list[tuple] = []
@@ -604,13 +638,21 @@ def discover_candidates(full_run: bool, errors: list[str], existing_records: lis
                 hits.extend(future.result())
             except Exception as exc:
                 errors.append(f"{provider.__name__}: {query}: {type(exc).__name__}: {exc}")
+                if discovery_audits is not None and is_official_url(query):
+                    discovery_audits.append({
+                        "checked_at": RUN_NOW.isoformat(timespec="seconds"),
+                        "provider": "税务机关公告栏目",
+                        "query": query,
+                        "url": normalize_url(query),
+                        "final_url": normalize_url(query),
+                        "status_code": None,
+                        "page_state": "暂时无法访问",
+                        "title": "",
+                        "error": f"{type(exc).__name__}: {exc}",
+                        "records": 0,
+                    })
 
-    deduped: dict[str, SearchHit] = {}
-    for hit in hits:
-        hit.url = normalize_url(hit.url)
-        if relevant_candidate(hit) and hit.url not in deduped:
-            deduped[hit.url] = hit
-    return list(deduped.values())
+    return merge_search_hits(hits)
 
 
 def historical_revalidation_hits(records: list[dict]) -> list[SearchHit]:
@@ -1076,7 +1118,7 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
         if published < date(2026, 1, 1):
             audit["skip_reason"] = "发布日期早于 2026-01-01"
             return [], audit
-        is_historical_revalidation = hit.query == "pending-or-invalid"
+        is_historical_revalidation = hit.query in {"pending-or-invalid", "retry-queue"}
         if not full_run and not is_historical_revalidation and published < start_date:
             audit["skip_reason"] = "不在本次增量时间窗"
             return [], audit
@@ -1289,11 +1331,17 @@ def canonical_keys(record: dict) -> list[tuple]:
     return keys
 
 
-def append_note(record: dict, note: str) -> None:
+def comparison_text(value: object) -> str:
+    return re.sub(r"\s+", " ", clean_text(value)).strip()
+
+
+def append_note(record: dict, note: str) -> bool:
     note = clean_text(note)
     current = clean_text(record.get("备注"))
-    if note and note not in current:
+    if note and comparison_text(note) not in comparison_text(current):
         record["备注"] = f"{current} {note}".strip()
+        return True
+    return False
 
 
 def informative_value(value: object) -> bool:
@@ -1327,8 +1375,8 @@ def merge_record(existing: dict, incoming: dict) -> tuple[dict, bool]:
             merged[field_name] = new
             changed = True
             continue
-        comparable_old = money_string(old) if field_name in MONEY_FIELDS else clean_text(old)
-        comparable_new = money_string(new) if field_name in MONEY_FIELDS else clean_text(new)
+        comparable_old = money_string(old) if field_name in MONEY_FIELDS else comparison_text(old)
+        comparable_new = money_string(new) if field_name in MONEY_FIELDS else comparison_text(new)
         if comparable_old == comparable_new:
             continue
 
@@ -1361,8 +1409,10 @@ def merge_record(existing: dict, incoming: dict) -> tuple[dict, bool]:
             merged[field_name] = new
             changed = True
         elif field_name not in {"备注", "最后核验日期", "页面当前状态", "核验状态"}:
-            append_note(merged, f"字段“{field_name}”存在冲突：保留原值“{old}”，新值“{new}”未静默覆盖。")
-            changed = True
+            changed = append_note(
+                merged,
+                f"字段“{field_name}”存在冲突：保留原值“{old}”，新值“{new}”未静默覆盖。",
+            ) or changed
 
     merged["首次发现日期"] = iso_date(existing.get("首次发现日期")) or iso_date(incoming.get("首次发现日期")) or TODAY.isoformat()
     merged["最后核验日期"] = TODAY.isoformat()
@@ -1405,6 +1455,19 @@ def sanitize_record(record: dict) -> None:
     legal_rep = clean_text(record.get("法定代表人"))
     if any(token in legal_rep for token in ("已", "法院", "涤除", "无法", "联系", "失联")):
         record["法定代表人"] = ""
+
+    # 清理由换行/连续空白差异产生的历史伪冲突备注，不影响真实值冲突记录。
+    note = clean_text(record.get("备注"))
+    conflict_pattern = re.compile(
+        r"字段“(?P<field>[^”]+)”存在冲突:保留原值“(?P<old>.*?)”[，,]"
+        r"新值“(?P<new>.*?)”未静默覆盖。",
+        re.S,
+    )
+    note = conflict_pattern.sub(
+        lambda match: "" if comparison_text(match.group("old")) == comparison_text(match.group("new")) else match.group(0),
+        note,
+    )
+    record["备注"] = re.sub(r"\s{2,}", " ", note).strip()
 
 
 def merge_all(existing_xlsx: list[dict], existing_csv: list[dict], incoming: list[dict]) -> tuple[list[dict], dict]:
@@ -1668,6 +1731,182 @@ def append_audit(entries: list[dict]) -> None:
             handle.write(json.dumps(entry, ensure_ascii=False, sort_keys=True) + "\n")
 
 
+def read_json_object(path: Path, fallback: dict) -> dict:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+        return value if isinstance(value, dict) else fallback
+    except (OSError, ValueError, TypeError):
+        return fallback
+
+
+def atomic_write_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(f".tmp{path.suffix}")
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(temp, path)
+
+
+def load_retry_queue() -> dict[str, dict]:
+    payload = read_json_object(RETRY_QUEUE_PATH, {"items": []})
+    items = payload.get("items", [])
+    if not isinstance(items, list):
+        return {}
+    result: dict[str, dict] = {}
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        url = normalize_url(item.get("url", ""))
+        if url and is_official_url(url):
+            result[url] = {**item, "url": url}
+    return result
+
+
+def retry_queue_hits(queue: dict[str, dict]) -> list[SearchHit]:
+    return [
+        SearchHit(
+            url=url,
+            title=clean_text(item.get("title")),
+            provider="持久化失败重试",
+            query="retry-queue",
+        )
+        for url, item in sorted(queue.items())
+    ]
+
+
+def transient_access_failure(audit: dict) -> bool:
+    status_code = audit.get("status_code")
+    try:
+        status_code = int(status_code) if status_code is not None else None
+    except (TypeError, ValueError):
+        status_code = None
+    return bool(
+        status_code == 429
+        or (status_code is not None and status_code >= 500)
+        or (status_code is None and clean_text(audit.get("error")))
+        or clean_text(audit.get("page_state")) == "暂时无法访问"
+    )
+
+
+def update_retry_queue(existing: dict[str, dict], audits: list[dict]) -> dict[str, dict]:
+    queue = dict(existing)
+    now = datetime.now().astimezone()
+    now_text = now.isoformat(timespec="seconds")
+    for audit in audits:
+        url = normalize_url(audit.get("url", ""))
+        if not url or not is_official_url(url):
+            continue
+        if transient_access_failure(audit):
+            previous = queue.get(url, {})
+            failures = int(previous.get("failureCount", 0) or 0) + 1
+            delay_hours = 1 if failures == 1 else 6 if failures == 2 else 24
+            queue[url] = {
+                "url": url,
+                "title": clean_text(audit.get("title")) or clean_text(previous.get("title")),
+                "provider": clean_text(audit.get("provider")) or clean_text(previous.get("provider")),
+                "query": clean_text(audit.get("query")) or clean_text(previous.get("query")),
+                "firstFailedAt": previous.get("firstFailedAt") or now_text,
+                "lastFailedAt": now_text,
+                "failureCount": failures,
+                "nextRetryAt": (now + timedelta(hours=delay_hours)).isoformat(timespec="seconds"),
+                "lastError": clean_text(audit.get("error")) or clean_text(audit.get("page_state")),
+                "lastStatus": audit.get("status_code"),
+            }
+        else:
+            # 已恢复、明确 404/410 或内容可访问时移出临时失败队列；历史记录仍会按状态每日复核。
+            queue.pop(url, None)
+    atomic_write_json(RETRY_QUEUE_PATH, {
+        "updatedAt": now_text,
+        "items": sorted(queue.values(), key=lambda item: item["url"]),
+    })
+    return queue
+
+
+def province_for_audit(audit: dict) -> str:
+    url = normalize_url(audit.get("final_url") or audit.get("url") or "")
+    host_prefix = urlparse(url).netloc.lower().split(".")[0]
+    if host_prefix in DOMAIN_PROVINCES:
+        return DOMAIN_PROVINCES[host_prefix]
+    province, _, _ = locate_region(clean_text(audit.get("title")), "", url)
+    return province
+
+
+def write_source_health(audits: list[dict]) -> tuple[dict, list[str]]:
+    previous_payload = read_json_object(PUBLIC_SOURCE_HEALTH_PATH, {"sources": []})
+    previous_sources = {
+        item.get("source"): item
+        for item in previous_payload.get("sources", [])
+        if isinstance(item, dict) and item.get("source")
+    }
+    now_text = datetime.now().astimezone().isoformat(timespec="seconds")
+    sources = []
+    failed_sources = []
+    for province in CORE_SOURCE_PROVINCES:
+        matching = [audit for audit in audits if province_for_audit(audit) == province]
+        successful = sum(
+            1 for audit in matching
+            if not transient_access_failure(audit)
+            and audit.get("status_code") is not None
+            and 200 <= int(audit["status_code"]) < 500
+        )
+        failed = sum(1 for audit in matching if transient_access_failure(audit))
+        if matching:
+            health_status = "healthy" if failed == 0 else "degraded" if successful else "unreachable"
+            item = {
+                "source": province,
+                "checked": len(matching),
+                "succeeded": successful,
+                "failed": failed,
+                "status": health_status,
+                "lastCheckedAt": now_text,
+                "lastError": next(
+                    (clean_text(audit.get("error")) or clean_text(audit.get("page_state")) for audit in matching if transient_access_failure(audit)),
+                    "",
+                ),
+            }
+        else:
+            old = previous_sources.get(province, {})
+            item = {
+                "source": province,
+                "checked": 0,
+                "succeeded": 0,
+                "failed": 0,
+                "status": old.get("status", "not_checked"),
+                "lastCheckedAt": old.get("lastCheckedAt"),
+                "lastError": old.get("lastError", ""),
+            }
+        if item["failed"]:
+            failed_sources.append(province)
+        sources.append(item)
+    for audit in audits:
+        if not transient_access_failure(audit):
+            continue
+        url = normalize_url(audit.get("final_url") or audit.get("url") or "")
+        source_name = province_for_audit(audit) or urlparse(url).netloc.lower()
+        if source_name and source_name not in failed_sources:
+            failed_sources.append(source_name)
+    payload = {"generatedAt": now_text, "sources": sources}
+    atomic_write_json(PUBLIC_SOURCE_HEALTH_PATH, payload)
+    return payload, failed_sources
+
+
+def current_source_commit() -> str:
+    configured = clean_text(os.getenv("SOURCE_COMMIT") or os.getenv("GITHUB_SHA"))
+    if configured:
+        return configured
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        return clean_text(result.stdout)
+    except (OSError, subprocess.SubprocessError):
+        return "local"
+
+
 def public_record(record: dict) -> dict:
     item: dict[str, object] = {}
     for json_name, source_name in JSON_FIELD_MAP.items():
@@ -1682,12 +1921,11 @@ def public_record(record: dict) -> dict:
     return item
 
 
-def write_public_artifacts(records: list[dict], log_entry: dict) -> None:
+def write_public_artifacts(records: list[dict], log_entry: dict, failed_sources: list[str]) -> None:
     PUBLIC_DATA_DIR.mkdir(parents=True, exist_ok=True)
     PUBLIC_DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
     public_records = [public_record(record) for record in records]
     temp_json = PUBLIC_JSON_PATH.with_suffix(".tmp.json")
-    temp_status = PUBLIC_STATUS_PATH.with_suffix(".tmp.json")
     temp_json.write_text(
         json.dumps(public_records, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -1696,9 +1934,25 @@ def write_public_artifacts(records: list[dict], log_entry: dict) -> None:
         1 for record in public_records
         if record.get("firstDiscoveredDate") == TODAY.isoformat()
     )
+    previous_status = read_json_object(PUBLIC_STATUS_PATH, {})
+    completed_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    run_success = log_entry["运行是否成功"] == "成功"
+    data_changed = (
+        int(log_entry["新增完整文书数量"])
+        + int(log_entry["新增文号线索数量"])
+        + int(log_entry["更新旧记录数量"])
+    ) > 0
     status = {
-        "status": "normal" if log_entry["运行是否成功"] == "成功" else "degraded",
-        "lastUpdated": log_entry["运行日期和时间"],
+        "status": "normal" if run_success and not failed_sources else "degraded",
+        "lastUpdated": completed_at,
+        "lastRunStartedAt": log_entry["运行日期和时间"],
+        "lastRunCompletedAt": completed_at,
+        "lastSuccessfulRunAt": completed_at if run_success else previous_status.get("lastSuccessfulRunAt"),
+        "lastDataChangeAt": completed_at if data_changed else previous_status.get("lastDataChangeAt", completed_at),
+        "lastProductionDeploymentAt": previous_status.get("lastProductionDeploymentAt"),
+        "sourceCommit": current_source_commit(),
+        "workflowRunId": os.getenv("GITHUB_RUN_ID") or f"local-{RUN_NOW.strftime('%Y%m%d%H%M%S')}",
+        "deploymentStatus": "pending" if os.getenv("GITHUB_ACTIONS") == "true" else "local",
         "timezone": TZ_NAME,
         "nextScheduledUpdate": PUBLIC_SCHEDULE,
         "searchRange": log_entry["检索时间范围"],
@@ -1711,17 +1965,15 @@ def write_public_artifacts(records: list[dict], log_entry: dict) -> None:
         "invalidLinks": sum(1 for record in public_records if record.get("pageStatus") not in NORMAL_STATES),
         "newCompleteDocuments": log_entry["新增完整文书数量"],
         "newClues": log_entry["新增文号线索数量"],
+        "newRecords": int(log_entry["新增完整文书数量"]) + int(log_entry["新增文号线索数量"]),
         "updatedRecords": log_entry["更新旧记录数量"],
         "duplicateRecords": log_entry["重复记录数量"],
-        "runSuccess": log_entry["运行是否成功"] == "成功",
+        "failedSources": failed_sources,
+        "runSuccess": run_success,
         "message": log_entry["运行说明"],
     }
-    temp_status.write_text(
-        json.dumps(status, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
     os.replace(temp_json, PUBLIC_JSON_PATH)
-    os.replace(temp_status, PUBLIC_STATUS_PATH)
+    atomic_write_json(PUBLIC_STATUS_PATH, status)
     shutil.copy2(XLSX_PATH, PUBLIC_XLSX_PATH)
     shutil.copy2(CSV_PATH, PUBLIC_CSV_PATH)
 
@@ -1782,28 +2034,37 @@ def main() -> int:
     success = True
     stats = {"new_full": 0, "new_clue": 0, "updated": 0, "duplicates": 0, "new_parties": []}
     audits: list[dict] = []
+    discovery_audits: list[dict] = []
     records: list[dict] = []
     hits: list[SearchHit] = []
+    existing_retry_queue = load_retry_queue()
     console(f"检索时间范围：{start_date.isoformat()} 至 {TODAY.isoformat()}（{TZ_NAME}）")
     try:
-        hits = discover_candidates(full_run, errors, existing_xlsx or existing_csv)
+        hits = discover_candidates(full_run, errors, existing_xlsx or existing_csv, discovery_audits)
         historical_hits = historical_revalidation_hits(existing_xlsx or existing_csv)
-        deduped_hits = {hit.url: hit for hit in hits}
-        for hit in historical_hits:
-            # 历史失效/待核验记录必须覆盖普通发现元数据，确保不受增量日期窗口过滤。
-            deduped_hits[hit.url] = hit
-        hits = list(deduped_hits.values())
+        queued_hits = retry_queue_hits(existing_retry_queue)
+        # 固定优先级：持久化失败/历史复核 > 官方栏目 > 搜索引擎。
+        hits = merge_search_hits(hits, historical_hits, queued_hits)
         if args.max_pages:
             hits = hits[:args.max_pages]
         console(f"发现并去重候选链接：{len(hits)} 个")
-        incoming, audits = process_hits(hits, start_date, full_run)
+        incoming, page_audits = process_hits(hits, start_date, full_run)
+        audits = discovery_audits + page_audits
         records, stats = merge_all(existing_xlsx, existing_csv, incoming)
     except Exception as exc:
         success = False
         errors.append(f"主流程：{type(exc).__name__}: {exc}")
         records, _ = merge_all(existing_xlsx, existing_csv, [])
 
+    if not audits:
+        audits = discovery_audits
     append_audit(audits)
+    try:
+        update_retry_queue(existing_retry_queue, audits)
+        _, failed_sources = write_source_health(audits)
+    except Exception as exc:
+        console(f"重试队列/来源健康状态写入失败：{type(exc).__name__}: {exc}")
+        return 1
     failed_count = sum(1 for record in records if record.get("页面当前状态") not in NORMAL_STATES)
     pending_count = sum(1 for record in records if record.get("核验状态") == "待核验")
     if stats["new_full"] + stats["new_clue"] == 0:
@@ -1830,7 +2091,7 @@ def main() -> int:
     try:
         write_csv(CSV_PATH, records)
         write_workbook(XLSX_PATH, records, logs)
-        write_public_artifacts(records, log_entry)
+        write_public_artifacts(records, log_entry, failed_sources)
     except Exception as exc:
         console(f"输出失败：{type(exc).__name__}: {exc}")
         return 1
