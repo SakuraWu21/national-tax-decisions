@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T19:32:02+08:00",
+  "generatedAt": "2026-08-06T14:52:38+08:00",
   "sources": [
     {
       "source": "福建省",
@@ -7,7 +7,7 @@
       "succeeded": 0,
       "failed": 12,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
@@ -16,8 +16,8 @@
       "succeeded": 0,
       "failed": 3,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luoyang/2026/04-21/132775.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /pingdingshan/2026/05-21/137810.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "贵州省",
@@ -25,17 +25,17 @@
       "succeeded": 0,
       "failed": 14,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/ass/tzgg_59745/ (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "广西壮族自治区",
-      "checked": 24,
-      "succeeded": 22,
+      "checked": 26,
+      "succeeded": 24,
       "failed": 2,
       "status": "degraded",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
-      "lastError": "ConnectTimeout: HTTPConnectionPool(host='guangxi.chinatax.gov.cn', port=8000): Max retries exceeded with url: /nanning/xxgk/swjcgg/ (Caused by ConnectTimeoutError(<HTTPConnection(host='guangxi.chinatax.gov.cn', port=8000) at 0x7fc80cd7f1d0>, 'Connection to guangxi.chinatax.gov.cn timed out. (connect timeout=9)'))"
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
+      "lastError": "ConnectTimeout: HTTPConnectionPool(host='guangxi.chinatax.gov.cn', port=8000): Max retries exceeded with url: /nanning/xxgk/swjcgg/ (Caused by ConnectTimeoutError(<HTTPConnection(host='guangxi.chinatax.gov.cn', port=8000) at 0x7f77f8064bf0>, 'Connection to guangxi.chinatax.gov.cn timed out. (connect timeout=9)'))"
     },
     {
       "source": "广东省",
@@ -43,7 +43,7 @@
       "succeeded": 2,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
       "lastError": ""
     },
     {
@@ -52,8 +52,8 @@
       "succeeded": 0,
       "failed": 20,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2024/8/1/art_9386_468376.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='etax.jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /jx/index.html (Caused by NewConnectionError(\"HTTPSConnection(host='etax.jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "浙江省",
@@ -61,7 +61,7 @@
       "succeeded": 7,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-05T19:32:02+08:00",
+      "lastCheckedAt": "2026-08-06T14:52:38+08:00",
       "lastError": ""
     }
   ]
