@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-08-06T15:32:38+08:00",
+  "generatedAt": "2026-08-07T14:02:47+08:00",
   "sources": [
     {
       "source": "福建省",
-      "checked": 15,
+      "checked": 20,
       "succeeded": 0,
-      "failed": 15,
+      "failed": 20,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /qzsswj/xxgk/sjxxgk/qtgg_23603/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "河南省",
-      "checked": 3,
+      "checked": 4,
       "succeeded": 0,
-      "failed": 3,
+      "failed": 4,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luoyang/2026/04-21/132775.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
@@ -25,7 +25,7 @@
       "succeeded": 0,
       "failed": 15,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/ass/tzgg_59745/ (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
@@ -34,8 +34,8 @@
       "succeeded": 24,
       "failed": 2,
       "status": "degraded",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
-      "lastError": "ConnectTimeout: HTTPConnectionPool(host='guangxi.chinatax.gov.cn', port=8000): Max retries exceeded with url: /nanning/xxgk/swjcgg/ (Caused by ConnectTimeoutError(<HTTPConnection(host='guangxi.chinatax.gov.cn', port=8000) at 0x7fd8e89f1310>, 'Connection to guangxi.chinatax.gov.cn timed out. (connect timeout=9)'))"
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
+      "lastError": "ConnectTimeout: HTTPConnectionPool(host='guangxi.chinatax.gov.cn', port=8000): Max retries exceeded with url: /nanning/xxgk/swjcgg/ (Caused by ConnectTimeoutError(<HTTPConnection(host='guangxi.chinatax.gov.cn', port=8000) at 0x7fefc41c4e90>, 'Connection to guangxi.chinatax.gov.cn timed out. (connect timeout=9)'))"
     },
     {
       "source": "广东省",
@@ -43,25 +43,25 @@
       "succeeded": 2,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
       "lastError": ""
     },
     {
       "source": "江苏省",
-      "checked": 22,
+      "checked": 29,
       "succeeded": 0,
-      "failed": 22,
+      "failed": 29,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='etax.jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /jx/index.html (Caused by NewConnectionError(\"HTTPSConnection(host='etax.jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "浙江省",
-      "checked": 7,
-      "succeeded": 7,
+      "checked": 6,
+      "succeeded": 6,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-06T15:32:38+08:00",
+      "lastCheckedAt": "2026-08-07T14:02:47+08:00",
       "lastError": ""
     }
   ]
