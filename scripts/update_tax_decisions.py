@@ -263,7 +263,7 @@ def new_session() -> requests.Session:
     session.headers.update({
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36 TaxDecisionResearchBot/1.0"
+            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
         ),
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.5",
         "Accept": "text/html,application/xhtml+xml,application/pdf,application/xml;q=0.9,*/*;q=0.8",
@@ -681,7 +681,7 @@ def historical_revalidation_hits(records: list[dict]) -> list[SearchHit]:
 def detect_page_state(status_code: int | None, text: str, error: str) -> str:
     if status_code in (404, 410):
         return "页面已删除"
-    if status_code is None or status_code >= 500 or error:
+    if status_code in (403, 408, 412, 425, 429) or status_code is None or status_code >= 500 or error:
         return "暂时无法访问"
     lowered = text.lower()
     if any(doc_type in text for doc_type in DOC_TYPES):
@@ -828,12 +828,16 @@ def extract_publication_date(text: str, url: str) -> str:
             except ValueError:
                 pass
     # 税务网站 URL 通常包含 YYYYMM 或 YYYY/MM/DD，属于可审计的发布日期线索。
-    match = re.search(r"(?:/|t)(20\d{2})[/-]?(\d{2})[/-]?(\d{2})", url)
-    if match:
-        try:
-            return date(*map(int, match.groups())).isoformat()
-        except ValueError:
-            pass
+    for pattern in (
+        r"(?:/|t)(20\d{2})[/-]?(\d{2})[/-]?(\d{2})",
+        r"P0(20\d{2})(\d{2})(\d{2})",
+    ):
+        match = re.search(pattern, url, re.I)
+        if match:
+            try:
+                return date(*map(int, match.groups())).isoformat()
+            except ValueError:
+                pass
     return ""
 
 
@@ -904,6 +908,9 @@ def candidate_subjects(title: str, text: str) -> list[str]:
         "国家税务总局", "税务局", "稽查局", "正文下载", "打印本页", "信息公开",
     }
     patterns = [
+        r"(?:^|\n|\s)\d{0,3}\s*([\u4e00-\u9fffA-Za-z0-9·（）()]{2,70}?"
+        r"(?:有限责任公司|股份有限公司|有限公司|公司|合作社|事务所|经营部|商行|商贸部|厂|店|中心))"
+        r"\s+(?:[0-9A-HJ-NPQRTUWXY]{18}|\d{15})\s+[^\n。；;]{0,35}?税[^\n。；;]{0,12}?[处罚]",
         r"(?:^|\n|[。；;])\s*(?:现向|向|对)?\s*([^\n。；;：:]{2,70}?"
         r"(?:有限责任公司|股份有限公司|有限公司|公司|合作社|事务所|经营部|商行|商贸部|厂|店|中心))"
         r"\s*[（(](?:统一社会信用代码|纳税人识别号|社会信用代码)",
@@ -933,9 +940,21 @@ def candidate_subjects(title: str, text: str) -> list[str]:
 
 
 def subject_block(text: str, subject: str, all_subjects: list[str]) -> str:
-    position = text.find(subject)
-    if position < 0:
+    positions = [match.start() for match in re.finditer(re.escape(subject), text)]
+    if not positions:
         return text
+    position = positions[0]
+    best_score = -1
+    for candidate in positions:
+        window = text[candidate:candidate + 700]
+        score = 0
+        if DOC_NO_PATTERN.search(window):
+            score += 2
+        if re.search(r"(?:[0-9A-HJ-NPQRTUWXY]{18}|\d{15})", window, re.I):
+            score += 1
+        if score >= best_score:
+            position = candidate
+            best_score = score
     end = len(text)
     for other in all_subjects:
         if other == subject:
@@ -969,6 +988,12 @@ def find_uscc(block: str, subject: str) -> str:
         block[:1600],
         re.I,
     )
+    if not match:
+        match = re.search(
+            r"^\s*" + re.escape(subject) + r"\s+([0-9A-HJ-NPQRTUWXY]{18})(?:\s|$)",
+            block[:600],
+            re.I,
+        )
     return match.group(1).upper() if match else ""
 
 
@@ -1780,7 +1805,7 @@ def transient_access_failure(audit: dict) -> bool:
     except (TypeError, ValueError):
         status_code = None
     return bool(
-        status_code == 429
+        status_code in (403, 408, 412, 425, 429)
         or (status_code is not None and status_code >= 500)
         or (status_code is None and clean_text(audit.get("error")))
         or clean_text(audit.get("page_state")) == "暂时无法访问"
