@@ -16,11 +16,44 @@ import update_tax_decisions as updater
 
 class ContinuousUpdateTests(unittest.TestCase):
     def test_http_retries_three_times_with_backoff(self) -> None:
-        retries = updater.new_session().get_adapter("https://").max_retries
+        session = updater.new_session()
+        retries = session.get_adapter("https://").max_retries
         self.assertEqual(retries.total, 3)
         self.assertEqual(retries.connect, 3)
         self.assertEqual(retries.read, 3)
         self.assertEqual(retries.backoff_factor, 1.0)
+        self.assertNotIn("TaxDecisionResearchBot", session.headers["User-Agent"])
+
+    def test_waf_responses_are_persisted_as_temporary_failures(self) -> None:
+        for status_code in (403, 408, 412, 425, 429):
+            with self.subTest(status_code=status_code):
+                self.assertEqual(updater.detect_page_state(status_code, "访问被拦截", ""), "暂时无法访问")
+                self.assertTrue(updater.transient_access_failure({
+                    "status_code": status_code,
+                    "page_state": "暂时无法访问",
+                    "error": "",
+                }))
+        self.assertEqual(updater.detect_page_state(404, "", ""), "页面已删除")
+
+    def test_attachment_identifier_supplies_publication_date(self) -> None:
+        url = "https://fujian.chinatax.gov.cn/example/202509/P020250901344584682810.pdf"
+        self.assertEqual(updater.extract_publication_date("", url), "2025-09-01")
+
+    def test_official_delivery_table_extracts_multiple_parties(self) -> None:
+        text = """关于送达税务处理决定书的公告（无锡奋西利科技有限公司、无锡强强运输有限公司、无锡市一川钢业有限公司）
+        国家税务总局无锡市税务局稽查局《税务处理决定书》公告送达名单
+        序号 纳税人名称 纳税人识别号 税务处理决定书文号
+        1 无锡奋西利科技有限公司 91320205MAK1LYB36M 锡税稽处〔2026〕88号
+        2 无锡强强运输有限公司 91320206089317767Y 锡税稽处〔2026〕89号
+        3 无锡市一川钢业有限公司 320200590045750 锡税稽处〔2026〕92号
+        """
+        self.assertEqual(
+            updater.candidate_subjects("税务处理决定书公告", text),
+            ["无锡奋西利科技有限公司", "无锡强强运输有限公司", "无锡市一川钢业有限公司"],
+        )
+        block = updater.subject_block(text, "无锡奋西利科技有限公司", updater.candidate_subjects("", text))
+        self.assertEqual(updater.find_uscc(block, "无锡奋西利科技有限公司"), "91320205MAK1LYB36M")
+        self.assertEqual(updater.extract_doc_numbers(block), [("税务处理决定书", "锡税稽处〔2026〕88号")])
 
     def test_historical_failure_priority_cannot_be_overwritten(self) -> None:
         url = "https://fujian.chinatax.gov.cn/example.html"
