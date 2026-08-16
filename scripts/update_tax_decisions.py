@@ -92,6 +92,11 @@ OFFICIAL_SUFFIXES = (".chinatax.gov.cn", ".gov.cn")
 NORMAL_STATES = {"正常", "附件正常"}
 SOURCE_PRIORITY = {"第三方待核验": 1, "政府公开平台": 2, "税务机关官网": 3}
 HTTPS_UPGRADE_HOSTS = {"neimenggu.chinatax.gov.cn"}
+INVALID_LEGAL_REP_TOKENS = (
+    "已", "法院", "涤除", "无法", "联系", "失联",
+    "委托代理人", "单位公章", "身份证", "材料办理", "或者股东", "个人账户",
+)
+INVALID_PARTY_MARKERS = ("该地址也是", "同时,", "同时，", "同时该地址")
 
 MONEY_FIELDS = {"追缴税款金额", "滞纳金金额", "罚款金额", "没收违法所得金额"}
 DATE_FIELDS = {"决定书作出日期", "官方发布日期", "第三方收录日期", "首次发现日期", "最后核验日期"}
@@ -659,13 +664,23 @@ def historical_revalidation_hits(records: list[dict]) -> list[SearchHit]:
     """每日重新核验历史待核验及失效链接，历史记录本身永不删除。"""
     hits: dict[str, SearchHit] = {}
     for record in records:
+        suspicious_subject = suspicious_party_name(record.get("当事人名称"))
+        unresolved_conflict = "存在冲突" in clean_text(record.get("备注"))
         needs_check = (
             clean_text(record.get("核验状态")) == "待核验"
             or clean_text(record.get("页面当前状态")) not in NORMAL_STATES
+            or suspicious_subject
+            or unresolved_conflict
         )
         if not needs_check:
             continue
-        for field_name in ("官方原文链接", "附件链接", "备用来源链接"):
+        fields = (
+            ("官方原文链接",)
+            if (suspicious_subject or unresolved_conflict)
+            and clean_text(record.get("页面当前状态")) in NORMAL_STATES
+            else ("官方原文链接", "附件链接", "备用来源链接")
+        )
+        for field_name in fields:
             for raw_url in clean_text(record.get(field_name)).split(";"):
                 url = normalize_url(raw_url)
                 if url.startswith(("http://", "https://")) and url not in hits:
@@ -913,8 +928,8 @@ def candidate_subjects(title: str, text: str) -> list[str]:
         r"\s+(?:[0-9A-HJ-NPQRTUWXY]{18}|\d{15})\s+[^\n。；;]{0,35}?税[^\n。；;]{0,12}?[处罚]",
         r"(?:^|\n|[。；;])\s*(?:现向|向|对)?\s*([^\n。；;：:]{2,70}?"
         r"(?:有限责任公司|股份有限公司|有限公司|公司|合作社|事务所|经营部|商行|商贸部|厂|店|中心))"
-        r"\s*[（(](?:统一社会信用代码|纳税人识别号|社会信用代码)",
-        r"^([^\n。；;：:]{2,70})\s*[（(](?:统一社会信用代码|纳税人识别号|社会信用代码)",
+        r"\s*[:：]?\s*[（(](?:统一社会信用代码|纳税人识别号|社会信用代码)",
+        r"^([^\n。；;：:]{2,70})\s*[:：]?\s*[（(](?:统一社会信用代码|纳税人识别号|社会信用代码)",
         r"关于送达([\u4e00-\u9fffA-Za-z0-9·（）()]{2,70}?"
         r"(?:有限责任公司|股份有限公司|有限公司|公司|合作社|事务所|经营部|商行|厂|店|中心))",
         r"关于(?:对|送达)?([\u4e00-\u9fff·]{2,12})的?税务文书",
@@ -934,6 +949,7 @@ def candidate_subjects(title: str, text: str) -> list[str]:
                 and name not in rejected
                 and not any(doc in name for doc in DOC_TYPES)
                 and not any(token in name for token in ("发布时间", "访问次数", "本站热词", "纳税人识别号"))
+                and not suspicious_party_name(name)
             ):
                 names.append(name)
     return names[:30]
@@ -979,6 +995,23 @@ def extract_doc_numbers(text: str) -> list[tuple[str, str]]:
     return found
 
 
+def document_number_year(value: object) -> int | None:
+    match = re.search(r"〔(20\d{2})〕", normalized_doc_no(value))
+    return int(match.group(1)) if match else None
+
+
+def provisional_out_of_scope(record: dict) -> bool:
+    """回滚本次运行中无法证明属于 2026 年公开范围的旧年度文书。"""
+    published = iso_date(record.get("官方发布日期")) or iso_date(record.get("第三方收录日期"))
+    year = document_number_year(record.get("决定书文号"))
+    return bool(
+        not published
+        and year is not None
+        and year < 2026
+        and iso_date(record.get("首次发现日期")) == TODAY.isoformat()
+    )
+
+
 def find_uscc(block: str, subject: str) -> str:
     if not subject.endswith(ENTITY_SUFFIXES):
         return ""
@@ -1002,7 +1035,7 @@ def find_legal_rep(block: str) -> str:
     if not match:
         return ""
     value = match.group(1)
-    if any(token in value for token in ("已", "法院", "涤除", "无法", "联系", "失联")):
+    if any(token in value for token in INVALID_LEGAL_REP_TOKENS):
         return ""
     return value
 
@@ -1045,12 +1078,19 @@ def extract_amounts(text: str) -> dict[str, float | None]:
         values["追缴税款金额"] = round(sum(amount for _, amount in unique_pairs), 2)
 
     keyword_patterns = {
-        "滞纳金金额": r"滞纳金(?:合计|金额)?\s*(?:为|人民币|[:：])?\s*" + AMOUNT_PATTERN,
-        "罚款金额": r"(?:处以|处罚|处)?罚款[^。；\n\d]{0,24}" + AMOUNT_PATTERN,
-        "没收违法所得金额": r"没收(?:违法所得)?[^。；\n\d]{0,24}" + AMOUNT_PATTERN,
+        "滞纳金金额": (r"滞纳金(?:合计|金额)?\s*(?:为|人民币|[:：])?\s*" + AMOUNT_PATTERN,),
+        "罚款金额": (
+            r"(?:处以|处罚|处)?罚款[^。；\n\d]{0,24}" + AMOUNT_PATTERN,
+            r"(?:处以|处罚|处)\s*" + AMOUNT_PATTERN + r"\s*的?罚款",
+        ),
+        "没收违法所得金额": (r"没收(?:违法所得)?[^。；\n\d]{0,24}" + AMOUNT_PATTERN,),
     }
-    for field_name, pattern in keyword_patterns.items():
-        amounts = [parse_money(m.group(1)) for m in re.finditer(pattern, compact)]
+    for field_name, patterns in keyword_patterns.items():
+        amounts = [
+            parse_money(match.group(1))
+            for pattern in patterns
+            for match in re.finditer(pattern, compact)
+        ]
         amounts = [value for value in amounts if value is not None]
         if amounts:
             values[field_name] = round(max(amounts), 2)
@@ -1157,6 +1197,11 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
     if not any(doc_type in title_and_text for doc_type in DOC_TYPES) or not doc_numbers_global:
         audit["skip_reason"] = "未同时确认目标文书类型和决定书文号"
         return [], audit
+    if not publication_date and all(
+        (document_number_year(doc_no) or 0) < 2026 for _, doc_no in doc_numbers_global
+    ):
+        audit["skip_reason"] = "无法确认2026年后发布日期，且文号年份早于2026"
+        return [], audit
 
     subjects = candidate_subjects(fetched.title, f"{fetched.text}\n{attachment_corpus}")
     if not subjects:
@@ -1181,7 +1226,8 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
         for doc_type, doc_no in doc_numbers:
             attachment = attachment_for_doc(fetched.attachments, doc_type, doc_no)
             attachment_text = compact_multiline(attachment.get("text", "")) if attachment else ""
-            evidence = f"{block}\n{attachment_text}"
+            # 附件明确对应当前文号时，以该附件为事实与金额证据，避免同页两份文书相互串值。
+            evidence = attachment_text or block
             amounts = extract_amounts(evidence)
             fact = extract_fact(evidence)
             result = extract_result(evidence)
@@ -1360,6 +1406,11 @@ def comparison_text(value: object) -> str:
     return re.sub(r"\s+", " ", clean_text(value)).strip()
 
 
+def suspicious_party_name(value: object) -> bool:
+    name = comparison_text(value)
+    return bool(name and any(marker in name for marker in INVALID_PARTY_MARKERS))
+
+
 def append_note(record: dict, note: str) -> bool:
     note = clean_text(note)
     current = clean_text(record.get("备注"))
@@ -1405,7 +1456,15 @@ def merge_record(existing: dict, incoming: dict) -> tuple[dict, bool]:
         if comparable_old == comparable_new:
             continue
 
-        if field_name == "来源级别" and incoming_priority > existing_priority:
+        if (
+            field_name == "当事人名称"
+            and suspicious_party_name(old)
+            and not suspicious_party_name(new)
+        ):
+            append_note(merged, f"当事人名称经官方原文复核，由“{old}”更正为“{new}”。")
+            merged[field_name] = new
+            changed = True
+        elif field_name == "来源级别" and incoming_priority > existing_priority:
             merged[field_name] = new
             changed = True
         elif field_name == "官方原文链接" and incoming_priority > existing_priority:
@@ -1420,12 +1479,19 @@ def merge_record(existing: dict, incoming: dict) -> tuple[dict, bool]:
             if combined != old:
                 merged[field_name] = combined
                 changed = True
-        elif field_name == "公开完整度" and old != "完整文书" and new == "完整文书":
-            merged[field_name] = new
-            changed = True
-        elif field_name in {"主要违法事实", "处理或处罚结果"} and len(clean_text(new)) > len(clean_text(old)):
-            merged[field_name] = new
-            changed = True
+        elif field_name == "公开完整度":
+            if old != "完整文书" and new == "完整文书":
+                merged[field_name] = new
+                changed = True
+        elif field_name in {"主要违法事实", "处理或处罚结果"}:
+            attachment_verified = (
+                clean_text(incoming.get("来源级别")) == "税务机关官网"
+                and clean_text(incoming.get("页面当前状态")) == "附件正常"
+            )
+            if attachment_verified or len(clean_text(new)) > len(clean_text(old)):
+                append_note(merged, f"字段“{field_name}”已根据官方附件重新解析。")
+                merged[field_name] = new
+                changed = True
         elif incoming_priority > existing_priority and field_name in {
             "省份", "城市", "区县", "发布机关", "稽查机构", "统一社会信用代码",
             "法定代表人", "决定书作出日期", "官方发布日期", "附件链接", "页面标题",
@@ -1478,8 +1544,18 @@ def sanitize_record(record: dict) -> None:
         record["统一社会信用代码"] = ""
         record["法定代表人"] = ""
     legal_rep = clean_text(record.get("法定代表人"))
-    if any(token in legal_rep for token in ("已", "法院", "涤除", "无法", "联系", "失联")):
+    if any(token in legal_rep for token in INVALID_LEGAL_REP_TOKENS):
         record["法定代表人"] = ""
+
+    result = clean_text(record.get("处理或处罚结果"))
+    if (
+        clean_text(record.get("文书类型")) == "税务处理决定书"
+        and "税务行政处罚决定书" in result
+        and "罚款" in result
+        and not any(token in result for token in ("追缴", "补缴"))
+    ):
+        record["处理或处罚结果"] = ""
+        append_note(record, "处理文书中的处罚结果串值已根据官方附件清除。")
 
     # 清理由换行/连续空白差异产生的历史伪冲突备注，不影响真实值冲突记录。
     note = clean_text(record.get("备注"))
@@ -1488,10 +1564,34 @@ def sanitize_record(record: dict) -> None:
         r"新值“(?P<new>.*?)”未静默覆盖。",
         re.S,
     )
-    note = conflict_pattern.sub(
-        lambda match: "" if comparison_text(match.group("old")) == comparison_text(match.group("new")) else match.group(0),
-        note,
-    )
+    def keep_conflict(match: re.Match) -> str:
+        field_name = match.group("field")
+        old = match.group("old")
+        new = match.group("new")
+        if comparison_text(old) == comparison_text(new):
+            return ""
+        if field_name == "公开完整度" and old == "完整文书" and new == "仅公告送达/仅文号线索":
+            return ""
+        attachment_urls = {
+            normalize_url(item)
+            for item in clean_text(record.get("附件链接")).split(";")
+            if clean_text(item)
+        }
+        if field_name == "官方原文链接" and normalize_url(new) in attachment_urls:
+            return ""
+        if field_name == "处理或处罚结果" and not clean_text(record.get("处理或处罚结果")):
+            return ""
+        if field_name in {"主要违法事实", "处理或处罚结果"} and f"字段“{field_name}”已根据官方附件重新解析。" in note:
+            return ""
+        if (
+            field_name in {"主要违法事实", "处理或处罚结果"}
+            and clean_text(record.get("来源级别")) == "税务机关官网"
+            and clean_text(record.get("页面当前状态")) == "附件正常"
+        ):
+            return f"字段“{field_name}”历史冲突已由官方附件复核，保留当前值。"
+        return match.group(0)
+
+    note = conflict_pattern.sub(keep_conflict, note)
     record["备注"] = re.sub(r"\s{2,}", " ", note).strip()
 
 
@@ -1518,6 +1618,8 @@ def merge_all(existing_xlsx: list[dict], existing_csv: list[dict], incoming: lis
     # Excel 和 CSV 都必须读取；若两者不一致，取并集且保留冲突说明。
     for source_name, batch in (("Excel", existing_xlsx), ("CSV", existing_csv)):
         for record in batch:
+            if provisional_out_of_scope(record):
+                continue
             index = locate(record)
             if index is None:
                 normalized = {field_name: record.get(field_name, "") for field_name in FIELDS}
@@ -1536,6 +1638,8 @@ def merge_all(existing_xlsx: list[dict], existing_csv: list[dict], incoming: lis
         [int(parse_money(record.get("序号")) or 0) for record in records] or [0]
     )
     for record in incoming:
+        if provisional_out_of_scope(record):
+            continue
         index = locate(record)
         if index is None:
             max_sequence += 1

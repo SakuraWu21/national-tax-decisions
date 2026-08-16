@@ -15,6 +15,54 @@ import update_tax_decisions as updater
 
 
 class ContinuousUpdateTests(unittest.TestCase):
+    def test_legal_representative_rejects_notice_template_text(self) -> None:
+        self.assertEqual(updater.find_legal_rep("法定代表人：张三"), "张三")
+        self.assertEqual(
+            updater.find_legal_rep("法定代表人或委托代理人持单位公章等材料办理"),
+            "",
+        )
+        self.assertEqual(updater.find_legal_rep("法定代表人或者股东的个人账户"), "")
+
+    def test_subject_parser_prefers_labeled_party_over_contextual_company(self) -> None:
+        text = """广西苒炙机械设备有限公司：（纳税人识别号：91451202MAK718N46N）
+        国家税务总局河池市税务局第二稽查局税务处理决定书 河市税二稽处〔2026〕12号
+        同时，该地址也是广西槟咪科技有限公司（纳税人识别号：91451202MAK5F6YF55）登记注册地址。"""
+        self.assertEqual(updater.candidate_subjects("税务文书送达公告", text), ["广西苒炙机械设备有限公司"])
+
+    def test_suspicious_subject_is_revalidated_and_replaced(self) -> None:
+        old = {
+            "当事人名称": "同时,该地址也是广西槟咪科技有限公司",
+            "官方原文链接": "https://guangxi.chinatax.gov.cn/example.html",
+            "核验状态": "已核验",
+            "页面当前状态": "正常",
+        }
+        hits = updater.historical_revalidation_hits([old])
+        self.assertEqual(len(hits), 1)
+        self.assertEqual(hits[0].provider, "历史记录复核")
+
+        existing = {field: "" for field in updater.FIELDS}
+        existing.update(old)
+        incoming = dict(existing)
+        incoming["当事人名称"] = "广西苒炙机械设备有限公司"
+        merged, changed = updater.merge_record(existing, incoming)
+        self.assertTrue(changed)
+        self.assertEqual(merged["当事人名称"], "广西苒炙机械设备有限公司")
+
+    def test_undated_old_document_is_outside_collection_period(self) -> None:
+        record = {field: "" for field in updater.FIELDS}
+        record.update({
+            "决定书文号": "常税稽一处〔2025〕35号",
+            "首次发现日期": updater.TODAY.isoformat(),
+        })
+        self.assertEqual(updater.document_number_year(record["决定书文号"]), 2025)
+        self.assertTrue(updater.provisional_out_of_scope(record))
+        record["官方发布日期"] = "2026-08-16"
+        self.assertFalse(updater.provisional_out_of_scope(record))
+
+    def test_fine_amount_after_action_verb_is_extracted(self) -> None:
+        amounts = updater.extract_amounts("对你公司虚开发票的行为处以200,000.00元的罚款。")
+        self.assertEqual(amounts["罚款金额"], 200000.0)
+
     def test_http_retries_three_times_with_backoff(self) -> None:
         session = updater.new_session()
         retries = session.get_adapter("https://").max_retries
