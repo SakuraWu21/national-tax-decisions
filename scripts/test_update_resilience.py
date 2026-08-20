@@ -29,6 +29,67 @@ class ContinuousUpdateTests(unittest.TestCase):
         同时，该地址也是广西槟咪科技有限公司（纳税人识别号：91451202MAK5F6YF55）登记注册地址。"""
         self.assertEqual(updater.candidate_subjects("税务文书送达公告", text), ["广西苒炙机械设备有限公司"])
 
+    def test_subject_parser_collapses_duplicated_company_suffix(self) -> None:
+        title = "关于送达福州濠鸿泰贸易有限公司《税务处理决定书》和《税务行政处罚决定书》的公告"
+        text = "福州濠鸿泰贸易有限公司公司（统一社会信用代码：91350100MA12345678）"
+        self.assertEqual(updater.candidate_subjects(title, text), ["福州濠鸿泰贸易有限公司"])
+
+    def test_single_party_page_merges_document_numbers_across_sections(self) -> None:
+        url = "https://fujian.chinatax.gov.cn/example/202608/t20260817_1.htm"
+        title = "关于送达福州濠鸿泰贸易有限公司《税务处理决定书》和《税务行政处罚决定书》的公告"
+        body = (
+            "福州濠鸿泰贸易有限公司：税务处理决定书榕税稽处〔2025〕233号。"
+            + ("正文" * 500)
+            + "税务行政处罚决定书榕税稽罚〔2026〕30号。"
+        )
+        fetched = updater.FetchResult(
+            url=url,
+            final_url=url,
+            ok=True,
+            status_code=200,
+            content_type="text/html",
+            content=b"",
+            text=body,
+            title=title,
+            state="正常",
+        )
+        rows, _ = updater.parse_fetch(
+            updater.SearchHit(url=url, provider="test", query="test"),
+            fetched,
+            date(2026, 8, 13),
+            False,
+        )
+        self.assertEqual(
+            {(row["文书类型"], row["决定书文号"]) for row in rows},
+            {
+                ("税务处理决定书", "榕税稽处〔2025〕233号"),
+                ("税务行政处罚决定书", "榕税稽罚〔2026〕30号"),
+            },
+        )
+
+    def test_same_page_pair_uses_one_case_group_across_document_years(self) -> None:
+        url = "https://fujian.chinatax.gov.cn/example/pair.htm"
+        processing = {field: "" for field in updater.FIELDS}
+        processing.update({
+            "序号": 108,
+            "案件组ID": "CASE-new",
+            "当事人名称": "福州濠鸿泰贸易有限公司",
+            "文书类型": "税务处理决定书",
+            "决定书文号": "榕税稽处〔2025〕233号",
+            "官方原文链接": url,
+        })
+        penalty = dict(processing)
+        penalty.update({
+            "序号": 77,
+            "案件组ID": "CASE-old",
+            "文书类型": "税务行政处罚决定书",
+            "决定书文号": "榕税稽罚〔2026〕30号",
+        })
+        updater.relink_case_groups([processing, penalty])
+        self.assertEqual(processing["案件组ID"], penalty["案件组ID"])
+        self.assertEqual(processing["关联处罚决定书文号"], "榕税稽罚〔2026〕30号")
+        self.assertEqual(penalty["关联处理决定书文号"], "榕税稽处〔2025〕233号")
+
     def test_suspicious_subject_is_revalidated_and_replaced(self) -> None:
         old = {
             "当事人名称": "同时,该地址也是广西槟咪科技有限公司",
@@ -58,6 +119,23 @@ class ContinuousUpdateTests(unittest.TestCase):
         self.assertTrue(updater.provisional_out_of_scope(record))
         record["官方发布日期"] = "2026-08-16"
         self.assertFalse(updater.provisional_out_of_scope(record))
+
+    def test_tax_matter_notice_does_not_republish_referenced_decisions(self) -> None:
+        notice_title = "关于送达《税务事项通知书(责令限期缴纳税款)》税务文书的公告"
+        self.assertTrue(updater.excluded_only_title(notice_title))
+        self.assertFalse(
+            updater.excluded_only_title(
+                "关于送达《税务处理决定书》和《税务事项通知书》的公告"
+            )
+        )
+        record = {field: "" for field in updater.FIELDS}
+        record.update({
+            "页面标题": notice_title,
+            "文书类型": "税务处理决定书",
+            "决定书文号": "来市税一稽处〔2025〕16号",
+            "官方发布日期": "2026-06-25",
+        })
+        self.assertTrue(updater.provisional_out_of_scope(record))
 
     def test_fine_amount_after_action_verb_is_extracted(self) -> None:
         amounts = updater.extract_amounts("对你公司虚开发票的行为处以200,000.00元的罚款。")

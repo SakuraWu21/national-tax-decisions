@@ -88,6 +88,9 @@ EXCLUDED_TITLES = (
     "税务行政处罚事项告知书", "税务处理事项告知书", "税务检查通知书", "税务稽查通知书",
     "责令限期改正通知书", "催告书", "听证通知书", "听证权利告知书", "欠税公告",
 )
+# 这类页面可能在正文中引用既往决定书文号，但页面本身公开的是另一份文书。
+# 只有标题同时明确包含目标决定书类型时，才允许继续核验正文或附件。
+EXCLUDED_ONLY_TITLE_MARKERS = ("税务事项通知书",)
 OFFICIAL_SUFFIXES = (".chinatax.gov.cn", ".gov.cn")
 NORMAL_STATES = {"正常", "附件正常"}
 SOURCE_PRIORITY = {"第三方待核验": 1, "政府公开平台": 2, "税务机关官网": 3}
@@ -942,6 +945,9 @@ def candidate_subjects(title: str, text: str) -> list[str]:
             if "对" in name and name.rsplit("对", 1)[-1].endswith(("公司", "厂", "店", "中心", "合作社", "事务所", "经营部", "商行", "商贸部")):
                 name = name.rsplit("对", 1)[-1]
             name = re.sub(r"^.*(?:年\d{1,2}月\d{1,2}日|经查|我局)", "", name)
+            # 个别官网正文会把企业后缀重复成“有限公司公司”，应归一为同一当事人，
+            # 否则同页的处理、处罚文号会被错误拆到两个主体块中。
+            name = re.sub(r"(有限责任公司|股份有限公司|有限公司|公司)公司$", r"\1", name)
             name = name.rstrip("的").strip()
             if (
                 2 <= len(name) <= 70
@@ -1000,8 +1006,18 @@ def document_number_year(value: object) -> int | None:
     return int(match.group(1)) if match else None
 
 
+def excluded_only_title(value: object) -> bool:
+    title = clean_text(value)
+    return bool(
+        any(marker in title for marker in EXCLUDED_ONLY_TITLE_MARKERS)
+        and not any(doc_type in title for doc_type in DOC_TYPES)
+    )
+
+
 def provisional_out_of_scope(record: dict) -> bool:
     """回滚本次运行中无法证明属于 2026 年公开范围的旧年度文书。"""
+    if excluded_only_title(record.get("页面标题")):
+        return True
     published = iso_date(record.get("官方发布日期")) or iso_date(record.get("第三方收录日期"))
     year = document_number_year(record.get("决定书文号"))
     return bool(
@@ -1191,7 +1207,9 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
     # 明确只有排除文书、且正文没有目标决定书/文号时不收录。
     excluded = [name for name in EXCLUDED_TITLES if name in fetched.title]
     doc_numbers_global = extract_doc_numbers(title_and_text)
-    if excluded:
+    if excluded or excluded_only_title(fetched.title):
+        if excluded_only_title(fetched.title):
+            excluded.append("税务事项通知书（标题未公开目标决定书）")
         audit["skip_reason"] = "排除文书类型：" + "、".join(excluded)
         return [], audit
     if not any(doc_type in title_and_text for doc_type in DOC_TYPES) or not doc_numbers_global:
@@ -1216,8 +1234,12 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
     for subject in subjects:
         block = subject_block(f"{fetched.text}\n{attachment_corpus}", subject, subjects)
         doc_numbers = extract_doc_numbers(block)
-        if not doc_numbers and len(subjects) == 1:
-            doc_numbers = doc_numbers_global
+        if len(subjects) == 1:
+            # 单一当事人页面常把处理、处罚文号分散在不同正文段落；主体不存在歧义时，
+            # 合并全页已确认文号，避免“最佳段落”只命中其中一份文书。
+            for item in doc_numbers_global:
+                if item not in doc_numbers:
+                    doc_numbers.append(item)
         if not doc_numbers:
             continue
         uscc = find_uscc(block, subject)
@@ -1595,6 +1617,49 @@ def sanitize_record(record: dict) -> None:
     record["备注"] = re.sub(r"\s{2,}", " ", note).strip()
 
 
+def relink_case_groups(records: list[dict]) -> None:
+    """统一同页同当事人的处理/处罚文书案件组，并重建双向关联文号。"""
+    same_page: dict[tuple[str, str], list[dict]] = {}
+    for record in records:
+        record["案件组ID"] = clean_text(record.get("案件组ID")) or build_group_id(record)
+        record["文书唯一ID"] = clean_text(record.get("文书唯一ID")) or build_unique_id(record)
+        party = clean_text(record.get("当事人名称"))
+        url = normalize_url(record.get("官方原文链接") or record.get("备用来源链接") or "")
+        if party and url:
+            same_page.setdefault((party, url), []).append(record)
+
+    for page_records in same_page.values():
+        if len({clean_text(item.get("文书类型")) for item in page_records}) < 2:
+            continue
+        canonical = min(
+            page_records,
+            key=lambda item: int(parse_money(item.get("序号")) or 10**9),
+        )
+        group_id = clean_text(canonical.get("案件组ID")) or build_group_id(canonical)
+        for record in page_records:
+            record["案件组ID"] = group_id
+
+    groups: dict[str, list[dict]] = {}
+    for record in records:
+        doc_no = clean_text(record.get("决定书文号"))
+        if record.get("文书类型") == "税务处理决定书":
+            record["关联处理决定书文号"] = doc_no
+            record["关联处罚决定书文号"] = ""
+        else:
+            record["关联处理决定书文号"] = ""
+            record["关联处罚决定书文号"] = doc_no
+        groups.setdefault(record["案件组ID"], []).append(record)
+
+    for group_records in groups.values():
+        processing = next((r.get("决定书文号", "") for r in group_records if r.get("文书类型") == "税务处理决定书"), "")
+        penalty = next((r.get("决定书文号", "") for r in group_records if r.get("文书类型") == "税务行政处罚决定书"), "")
+        for record in group_records:
+            if processing:
+                record["关联处理决定书文号"] = processing
+            if penalty:
+                record["关联处罚决定书文号"] = penalty
+
+
 def merge_all(existing_xlsx: list[dict], existing_csv: list[dict], incoming: list[dict]) -> tuple[list[dict], dict]:
     records: list[dict] = []
     key_to_index: dict[tuple, int] = {}
@@ -1663,23 +1728,10 @@ def merge_all(existing_xlsx: list[dict], existing_csv: list[dict], incoming: lis
             if changed:
                 stats["updated"] += 1
 
-    # 重新建立同案件关联；两类文书仍保留为独立记录。
-    groups: dict[str, list[dict]] = {}
-    for record in records:
-        record["案件组ID"] = record.get("案件组ID") or build_group_id(record)
-        record["文书唯一ID"] = record.get("文书唯一ID") or build_unique_id(record)
-        groups.setdefault(record["案件组ID"], []).append(record)
-    for group_records in groups.values():
-        processing = next((r.get("决定书文号", "") for r in group_records if r.get("文书类型") == "税务处理决定书"), "")
-        penalty = next((r.get("决定书文号", "") for r in group_records if r.get("文书类型") == "税务行政处罚决定书"), "")
-        for record in group_records:
-            if processing:
-                record["关联处理决定书文号"] = processing
-            if penalty:
-                record["关联处罚决定书文号"] = penalty
-
     for record in records:
         sanitize_record(record)
+    # 两类文书仍保留独立记录；同一官方页面明确公开的成对文书统一案件组。
+    relink_case_groups(records)
 
     def sort_key(record: dict) -> tuple:
         published = iso_date(record.get("官方发布日期")) or iso_date(record.get("第三方收录日期")) or "0000-00-00"
