@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T13:20:54+08:00",
+  "generatedAt": "2026-08-23T13:04:21+08:00",
   "sources": [
     {
       "source": "福建省",
@@ -7,8 +7,8 @@
       "succeeded": 0,
       "failed": 23,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /pingtanswj/zfxxgkzl/zfxxgkml/qtgg/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "河南省",
@@ -16,8 +16,8 @@
       "succeeded": 0,
       "failed": 6,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luoyang/2026/05-14/137613.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luoyang/2026/04-21/132775.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "贵州省",
@@ -25,17 +25,17 @@
       "succeeded": 0,
       "failed": 17,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/ass/tzgg_59745/ (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "广西壮族自治区",
-      "checked": 33,
+      "checked": 34,
       "succeeded": 0,
-      "failed": 33,
+      "failed": 34,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /chongzuo/xxgk_15621/swjcgg/ (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /beihai/tzgg_15227/tzgg_15228/ (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "source": "广东省",
@@ -43,7 +43,7 @@
       "succeeded": 3,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
       "lastError": ""
     },
     {
@@ -52,7 +52,7 @@
       "succeeded": 0,
       "failed": 24,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2022/2/16/art_9280_376393.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
@@ -61,7 +61,7 @@
       "succeeded": 5,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-22T13:20:54+08:00",
+      "lastCheckedAt": "2026-08-23T13:04:21+08:00",
       "lastError": ""
     }
   ]
