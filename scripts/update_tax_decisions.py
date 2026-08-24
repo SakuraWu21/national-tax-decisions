@@ -1579,6 +1579,15 @@ def sanitize_record(record: dict) -> None:
         record["处理或处罚结果"] = ""
         append_note(record, "处理文书中的处罚结果串值已根据官方附件清除。")
 
+    # B 类记录只证明当事人、文书类型和文号。公告模板中的零散句子、税种和
+    # 金额不能当作案情证据，统一留空，避免把半截文号或送达措辞展示成结果。
+    if clean_text(record.get("公开完整度")) == "仅公告送达/仅文号线索":
+        record["主要违法事实"] = ""
+        record["涉及税种"] = ""
+        record["处理或处罚结果"] = ""
+        for field_name in MONEY_FIELDS:
+            record[field_name] = None
+
     # 清理由换行/连续空白差异产生的历史伪冲突备注，不影响真实值冲突记录。
     note = clean_text(record.get("备注"))
     conflict_pattern = re.compile(

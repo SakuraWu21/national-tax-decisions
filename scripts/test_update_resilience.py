@@ -15,6 +15,24 @@ import update_tax_decisions as updater
 
 
 class ContinuousUpdateTests(unittest.TestCase):
+    def test_clue_record_does_not_keep_inferred_case_details(self) -> None:
+        record = {field: "" for field in updater.FIELDS}
+        record.update({
+            "当事人名称": "景洪市瑞运机动车经营部",
+            "文书类型": "税务处理决定书",
+            "决定书文号": "西税稽处〔2026〕38号",
+            "公开完整度": "仅公告送达/仅文号线索",
+            "主要违法事实": "公告模板误提取内容",
+            "涉及税种": "增值税",
+            "追缴税款金额": 100,
+            "处理或处罚结果": "26〕38号)予以公告送达。",
+        })
+        updater.sanitize_record(record)
+        self.assertEqual(record["主要违法事实"], "")
+        self.assertEqual(record["涉及税种"], "")
+        self.assertIsNone(record["追缴税款金额"])
+        self.assertEqual(record["处理或处罚结果"], "")
+
     def test_legal_representative_rejects_notice_template_text(self) -> None:
         self.assertEqual(updater.find_legal_rep("法定代表人：张三"), "张三")
         self.assertEqual(
