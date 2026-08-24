@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T13:14:16+08:00",
+  "generatedAt": "2026-08-24T13:38:22+08:00",
   "sources": [
     {
       "source": "福建省",
@@ -7,8 +7,8 @@
       "succeeded": 0,
       "failed": 24,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /qzsswj/xxgk/sjxxgk/qtgg_23603/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /pingtanswj/zfxxgkzl/zfxxgkml/qtgg/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "河南省",
@@ -16,7 +16,7 @@
       "succeeded": 0,
       "failed": 7,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luoyang/2026/04-21/132775.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
@@ -25,7 +25,7 @@
       "succeeded": 0,
       "failed": 17,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/ass/tzgg_59745/ (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
@@ -34,8 +34,8 @@
       "succeeded": 0,
       "failed": 34,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /fangchenggang/tzgg_15261/tzgg_15262/ (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/ (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "source": "广东省",
@@ -43,7 +43,7 @@
       "succeeded": 3,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
       "lastError": ""
     },
     {
@@ -52,16 +52,16 @@
       "succeeded": 0,
       "failed": 29,
       "status": "unreachable",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2022/2/16/art_9280_376393.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2021/11/23/art_9508_368372.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "source": "浙江省",
-      "checked": 7,
-      "succeeded": 7,
+      "checked": 6,
+      "succeeded": 6,
       "failed": 0,
       "status": "healthy",
-      "lastCheckedAt": "2026-08-24T13:14:16+08:00",
+      "lastCheckedAt": "2026-08-24T13:38:22+08:00",
       "lastError": ""
     }
   ]
