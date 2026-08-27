@@ -30,6 +30,7 @@ from pathlib import Path
 from typing import Iterable
 from urllib.parse import parse_qs, quote_plus, unquote, urljoin, urlparse, urlunparse
 from xml.etree import ElementTree
+from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
@@ -64,7 +65,14 @@ TZ_NAME = "Asia/Shanghai"
 PUBLIC_SCHEDULE = "每日 12:07 主任务；12:37 补偿任务（北京时间）"
 RECENT_LOOKBACK_DAYS = 7
 OFFICIAL_INDEX_LOOKBACK_DAYS = 14
-RUN_NOW = datetime.now().astimezone()
+
+
+def now_in_project_timezone() -> datetime:
+    """所有环境统一使用项目约定的北京时间，避免受执行主机时区影响。"""
+    return datetime.now(ZoneInfo(TZ_NAME))
+
+
+RUN_NOW = now_in_project_timezone()
 TODAY = RUN_NOW.date()
 
 FIELDS = [
@@ -1979,7 +1987,7 @@ def transient_access_failure(audit: dict) -> bool:
 
 def update_retry_queue(existing: dict[str, dict], audits: list[dict]) -> dict[str, dict]:
     queue = dict(existing)
-    now = datetime.now().astimezone()
+    now = now_in_project_timezone()
     now_text = now.isoformat(timespec="seconds")
     for audit in audits:
         url = normalize_url(audit.get("url", ""))
@@ -2027,7 +2035,7 @@ def write_source_health(audits: list[dict]) -> tuple[dict, list[str]]:
         for item in previous_payload.get("sources", [])
         if isinstance(item, dict) and item.get("source")
     }
-    now_text = datetime.now().astimezone().isoformat(timespec="seconds")
+    now_text = now_in_project_timezone().isoformat(timespec="seconds")
     sources = []
     failed_sources = []
     for province in CORE_SOURCE_PROVINCES:
@@ -2125,7 +2133,7 @@ def write_public_artifacts(records: list[dict], log_entry: dict, failed_sources:
         if record.get("firstDiscoveredDate") == TODAY.isoformat()
     )
     previous_status = read_json_object(PUBLIC_STATUS_PATH, {})
-    completed_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    completed_at = now_in_project_timezone().isoformat(timespec="seconds")
     run_success = log_entry["运行是否成功"] == "成功"
     data_changed = (
         int(log_entry["新增完整文书数量"])

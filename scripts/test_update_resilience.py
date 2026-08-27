@@ -15,6 +15,10 @@ import update_tax_decisions as updater
 
 
 class ContinuousUpdateTests(unittest.TestCase):
+    def test_runtime_clock_is_fixed_to_project_timezone(self) -> None:
+        self.assertEqual(str(updater.RUN_NOW.tzinfo), updater.TZ_NAME)
+        self.assertEqual(updater.RUN_NOW.utcoffset().total_seconds(), 8 * 60 * 60)
+
     def test_clue_record_does_not_keep_inferred_case_details(self) -> None:
         record = {field: "" for field in updater.FIELDS}
         record.update({
