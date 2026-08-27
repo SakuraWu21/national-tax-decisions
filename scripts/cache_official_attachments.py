@@ -12,6 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -28,6 +29,12 @@ USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0 Safari/537.36"
 )
+TZ_NAME = "Asia/Shanghai"
+
+
+def now_in_project_timezone() -> datetime:
+    """所有环境统一使用项目约定的北京时间。"""
+    return datetime.now(ZoneInfo(TZ_NAME))
 
 
 def new_session() -> requests.Session:
@@ -83,7 +90,7 @@ def cached_file_from_entry(entry: dict) -> Path | None:
 
 
 def download_document(original_url: str, source_page_url: str) -> dict:
-    checked_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    checked_at = now_in_project_timezone().isoformat(timespec="seconds")
     headers = {"Referer": source_page_url} if source_page_url else {}
     try:
         with new_session() as session:
@@ -192,7 +199,7 @@ def main() -> int:
         }
 
     manifest = {
-        "generatedAt": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "generatedAt": now_in_project_timezone().isoformat(timespec="seconds"),
         "attachments": dict(sorted(entries.items())),
     }
     temp_manifest = MANIFEST_PATH.with_suffix(".tmp.json")

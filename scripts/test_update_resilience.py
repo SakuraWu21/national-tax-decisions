@@ -12,9 +12,15 @@ from pathlib import Path
 from unittest.mock import patch
 
 import update_tax_decisions as updater
+import cache_official_attachments as attachment_cache
 
 
 class ContinuousUpdateTests(unittest.TestCase):
+    def test_attachment_cache_clock_is_fixed_to_project_timezone(self) -> None:
+        now = attachment_cache.now_in_project_timezone()
+        self.assertEqual(str(now.tzinfo), attachment_cache.TZ_NAME)
+        self.assertEqual(now.utcoffset().total_seconds(), 8 * 60 * 60)
+
     def test_runtime_clock_is_fixed_to_project_timezone(self) -> None:
         self.assertEqual(str(updater.RUN_NOW.tzinfo), updater.TZ_NAME)
         self.assertEqual(updater.RUN_NOW.utcoffset().total_seconds(), 8 * 60 * 60)
