@@ -16,6 +16,71 @@ import cache_official_attachments as attachment_cache
 
 
 class ContinuousUpdateTests(unittest.TestCase):
+    def test_merging_stored_copies_does_not_claim_a_new_verification(self) -> None:
+        record = {"文书唯一ID": "DOC-history", "当事人名称": "测试有限公司", "文书类型": "税务处理决定书",
+                  "决定书文号": "测税稽处〔2026〕1号", "最后核验日期": "2026-08-20"}
+        rows, _ = updater.merge_all([record], [dict(record)], [])
+        self.assertEqual(rows[0]["最后核验日期"], "2026-08-20")
+        merged, _ = updater.merge_record(record, {**record, "最后核验日期": "2026-08-27"})
+        self.assertEqual(merged["最后核验日期"], "2026-08-27")
+
+    def test_standalone_company_salutation_recovers_aug27_pair(self) -> None:
+        url = "https://zhejiang.chinatax.gov.cn/art/2026/8/27/art_9048_659252.html"
+        title = "国家税务总局台州市税务局稽查局税务文书送达公告（台州博翔运输有限公司）台税稽告〔2026〕19号"
+        body = (
+            "发布时间：2026-08-27\n台州博翔运输有限公司：\n"
+            "你单位在工商登记注册地址与生产经营地址均无办公地点。"
+            "《税务处理决定书》（台税稽处〔2026〕12号）、"
+            "《税务行政处罚决定书》（台税稽罚〔2026〕18号）、"
+            "《纳税缴费信用修复告知书》（2026年第15号）予以公告送达。"
+        )
+        fetched = updater.FetchResult(url, url, True, 200, "text/html", b"", body, title, "正常")
+        rows, audit = updater.parse_fetch(updater.SearchHit(url), fetched, date(2026, 8, 20), False)
+        self.assertEqual(audit["records"], 2)
+        self.assertEqual({row["当事人名称"] for row in rows}, {"台州博翔运输有限公司"})
+        self.assertEqual({row["决定书文号"] for row in rows}, {"台税稽处〔2026〕12号", "台税稽罚〔2026〕18号"})
+        self.assertEqual(len({row["案件组ID"] for row in rows}), 1)
+        agency, inspection = updater.extract_agency("国家税务总局浙江省税务局 通知公告 " + title, body)
+        self.assertEqual(agency, "国家税务总局台州市税务局稽查局")
+        self.assertEqual(inspection, agency)
+        for row in rows:
+            updater.sanitize_record(row)
+            self.assertEqual(row["公开完整度"], "仅公告送达/仅文号线索")
+            self.assertFalse(row["主要违法事实"])
+            self.assertIsNone(row["罚款金额"])
+
+    def test_unparsed_official_party_is_queued_until_parser_recovers(self) -> None:
+        url = "https://zhejiang.chinatax.gov.cn/art/2026/8/27/art_9048_659252.html"
+        audit = {"url": url, "status_code": 200, "page_state": "正常", "skip_reason": "无法确认当事人", "records": 0}
+        with tempfile.TemporaryDirectory() as directory, patch.object(updater, "RETRY_QUEUE_PATH", Path(directory) / "retry.json"):
+            queue = updater.update_retry_queue({}, [audit])
+            self.assertIn(url, queue)
+            self.assertEqual(updater.retry_queue_hits(queue)[0].query, "retry-queue")
+            recovered = {**audit, "skip_reason": "", "records": 2}
+            self.assertEqual(updater.update_retry_queue(queue, [recovered]), {})
+
+    def test_partial_recovery_does_not_claim_complete_coverage(self) -> None:
+        good = {"status_code": 200, "page_state": "正常"}
+        bad = {"status_code": None, "page_state": "暂时无法访问", "error": "timeout"}
+        status = updater.build_search_coverage([good, bad], {}, "scheduled")
+        self.assertEqual(status["coverageStatus"], "partial")
+        self.assertEqual(status["accessiblePages"], 1)
+        self.assertEqual(status["failedPages"], 1)
+        self.assertEqual(updater.build_search_coverage([good], {}, "targeted")["coverageStatus"], "partial")
+        self.assertEqual(updater.build_search_coverage([good], {}, "scheduled")["coverageStatus"], "complete")
+        self.assertEqual(updater.build_search_coverage([], {}, "scheduled")["coverageStatus"], "unavailable")
+
+    def test_pending_links_have_only_unverified_date_hints(self) -> None:
+        url = "https://jiangsu.chinatax.gov.cn/art/2026/8/27/art_9432_1777559.html"
+        with patch.object(updater, "TODAY", date(2026, 8, 29)):
+            status = updater.build_search_coverage([], {url: {"title": "税务文书送达公告", "lastError": "timeout"}}, "targeted")
+        self.assertEqual(status["pendingCandidates"][0]["dateHint"], "2026-08-27")
+        self.assertNotIn("officialPublishDate", status["pendingCandidates"][0])
+        with patch.object(updater, "TODAY", date(2026, 8, 29)):
+            collected = updater.build_search_coverage([], {url: {}}, "targeted", [{"官方原文链接": url}])
+        self.assertEqual(collected["pendingCandidates"], [])
+        self.assertEqual(collected["retryQueueSize"], 1)
+
     def test_attachment_cache_clock_is_fixed_to_project_timezone(self) -> None:
         now = attachment_cache.now_in_project_timezone()
         self.assertEqual(str(now.tzinfo), attachment_cache.TZ_NAME)

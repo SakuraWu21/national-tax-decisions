@@ -39,7 +39,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Test parsing and update resilience
+        run: python -m unittest discover -s scripts -p test_update_resilience.py
+
       - name: Update decision database
+        # GitHub 默认 bash 使用 pipefail；爬虫异常不能被 tee 的成功掩盖。
+        shell: bash
         run: python scripts/update_tax_decisions.py | tee update-summary.log
 
       - name: Cache verified official attachments

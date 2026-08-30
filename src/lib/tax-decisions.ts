@@ -72,6 +72,18 @@ export type UpdateStatus = {
   failedSources: string[];
   runSuccess: boolean;
   message: string;
+  runMode?: "scheduled" | "targeted";
+  coverageStatus?: "complete" | "partial" | "unavailable";
+  accessiblePages?: number;
+  failedPages?: number;
+  retryQueueSize?: number;
+  pendingCandidates?: {
+    url: string;
+    title: string;
+    dateHint: string;
+    lastCheckedAt: string | null;
+    reason: string;
+  }[];
 };
 
 export type LinkFallbackEntry = {
