@@ -910,7 +910,7 @@ def locate_region(title: str, text: str, url: str) -> tuple[str, str, str]:
 
 def extract_agency(title: str, text: str) -> tuple[str, str]:
     candidates = re.findall(
-        r"国家税务总局[\u4e00-\u9fff·]{2,45}?(?:税务局(?:第[一二三四五]稽查局)?|稽查局)",
+        r"国家税务总局[\u4e00-\u9fff·]{2,45}?(?:税务局(?:(?:第[一二三四五])?稽查局)?|稽查局)",
         f"{title}\n{text[-4000:]}",
     )
     cleaned = []
@@ -934,6 +934,10 @@ def candidate_subjects(title: str, text: str) -> list[str]:
         "国家税务总局", "税务局", "稽查局", "正文下载", "打印本页", "信息公开",
     }
     patterns = [
+        # 公告常以独立的“公司名称：”称呼当事人，并不总是公布信用代码。
+        # 限定行首与企业后缀，避免把案情中提到的其他公司当成受送达人。
+        r"(?:^|\n)\s*([\u4e00-\u9fffA-Za-z0-9·（）()]{2,70}?"
+        r"(?:有限责任公司|股份有限公司|有限公司|公司|合作社|事务所|经营部|商行|商贸部|厂|店|中心))\s*[:：]",
         r"(?:^|\n|\s)\d{0,3}\s*([\u4e00-\u9fffA-Za-z0-9·（）()]{2,70}?"
         r"(?:有限责任公司|股份有限公司|有限公司|公司|合作社|事务所|经营部|商行|商贸部|厂|店|中心))"
         r"\s+(?:[0-9A-HJ-NPQRTUWXY]{18}|\d{15})\s+[^\n。；;]{0,35}?税[^\n。；;]{0,12}?[处罚]",
@@ -1285,6 +1289,8 @@ def parse_fetch(hit: SearchHit, fetched: FetchResult, start_date: date, full_run
             official_link = fetched.final_url if level != "第三方待核验" else ""
             backup_link = "" if level != "第三方待核验" else fetched.final_url
             notes = []
+            if attachment_ok and not has_detail:
+                notes.append("官方附件可下载，但尚未提取到可核实的案情或金额，按文号线索收录。")
             if "撤销" in fetched.title or "撤销上述" in fetched.text:
                 notes.append("官方页面显示该决定书已被撤销。")
             if "告知书" in fetched.title and doc_type not in fetched.title:
@@ -1536,7 +1542,8 @@ def merge_record(existing: dict, incoming: dict) -> tuple[dict, bool]:
             ) or changed
 
     merged["首次发现日期"] = iso_date(existing.get("首次发现日期")) or iso_date(incoming.get("首次发现日期")) or TODAY.isoformat()
-    merged["最后核验日期"] = TODAY.isoformat()
+    # 合并两个历史副本不等于重新访问官网，只有真实抓取结果才能带来新核验日期。
+    merged["最后核验日期"] = max(iso_date(existing.get("最后核验日期")), iso_date(incoming.get("最后核验日期")))
     merged["文书唯一ID"] = clean_text(existing.get("文书唯一ID")) or build_unique_id(merged)
     merged["案件组ID"] = clean_text(existing.get("案件组ID")) or build_group_id(merged)
     return merged, changed
@@ -1993,7 +2000,9 @@ def update_retry_queue(existing: dict[str, dict], audits: list[dict]) -> dict[st
         url = normalize_url(audit.get("url", ""))
         if not url or not is_official_url(url):
             continue
-        if transient_access_failure(audit):
+        # 已打开但解析失败的目标文书也要保留，规则修复后才能再次处理。
+        parse_failure = audit.get("skip_reason") == "无法确认当事人"
+        if transient_access_failure(audit) or parse_failure:
             previous = queue.get(url, {})
             failures = int(previous.get("failureCount", 0) or 0) + 1
             delay_hours = 1 if failures == 1 else 6 if failures == 2 else 24
@@ -2006,7 +2015,7 @@ def update_retry_queue(existing: dict[str, dict], audits: list[dict]) -> dict[st
                 "lastFailedAt": now_text,
                 "failureCount": failures,
                 "nextRetryAt": (now + timedelta(hours=delay_hours)).isoformat(timespec="seconds"),
-                "lastError": clean_text(audit.get("error")) or clean_text(audit.get("page_state")),
+                "lastError": clean_text(audit.get("error")) or clean_text(audit.get("skip_reason")) or clean_text(audit.get("page_state")),
                 "lastStatus": audit.get("status_code"),
             }
         else:
@@ -2038,6 +2047,7 @@ def write_source_health(audits: list[dict]) -> tuple[dict, list[str]]:
     now_text = now_in_project_timezone().isoformat(timespec="seconds")
     sources = []
     failed_sources = []
+    retry_queue = load_retry_queue()
     for province in CORE_SOURCE_PROVINCES:
         matching = [audit for audit in audits if province_for_audit(audit) == province]
         successful = sum(
@@ -2052,6 +2062,7 @@ def write_source_health(audits: list[dict]) -> tuple[dict, list[str]]:
             item = {
                 "source": province,
                 "checked": len(matching),
+                "checkedThisRun": len(matching),
                 "succeeded": successful,
                 "failed": failed,
                 "status": health_status,
@@ -2065,14 +2076,18 @@ def write_source_health(audits: list[dict]) -> tuple[dict, list[str]]:
             old = previous_sources.get(province, {})
             item = {
                 "source": province,
-                "checked": 0,
-                "succeeded": 0,
-                "failed": 0,
+                "checked": old.get("checked", 0),
+                "checkedThisRun": 0,
+                "succeeded": old.get("succeeded", 0),
+                "failed": old.get("failed", 0),
                 "status": old.get("status", "not_checked"),
                 "lastCheckedAt": old.get("lastCheckedAt"),
                 "lastError": old.get("lastError", ""),
             }
-        if item["failed"]:
+        item["pendingRetries"] = sum(1 for url in retry_queue if province_for_audit({"url": url}) == province)
+        if item["pendingRetries"] and item["status"] == "healthy":
+            item["status"] = "degraded"
+        if item["status"] in {"degraded", "unreachable"}:
             failed_sources.append(province)
         sources.append(item)
     for audit in audits:
@@ -2119,7 +2134,50 @@ def public_record(record: dict) -> dict:
     return item
 
 
-def write_public_artifacts(records: list[dict], log_entry: dict, failed_sources: list[str]) -> None:
+def build_search_coverage(audits: list[dict], queue: dict[str, dict], run_mode: str, records: list[dict] | None = None) -> dict:
+    """任务写入成功不等于官网覆盖完整；失败候选与正式文书分开公布。"""
+    accessible = sum(
+        1 for audit in audits
+        if isinstance(audit.get("status_code"), int) and 200 <= audit["status_code"] < 300
+        and audit.get("page_state") in NORMAL_STATES
+    )
+    failed = sum(1 for audit in audits if transient_access_failure(audit))
+    unresolved = sum(1 for audit in audits if audit.get("skip_reason") == "无法确认当事人")
+    pending = []
+    collected_urls = {
+        normalize_url(url)
+        for record in records or []
+        for field in ("官方原文链接", "附件链接", "备用来源链接")
+        for url in clean_text(record.get(field)).split(";") if url
+    }
+    cutoff = TODAY - timedelta(days=OFFICIAL_INDEX_LOOKBACK_DAYS)
+    for url, item in queue.items():
+        hint = date_from_listing_url(url)
+        if url in collected_urls or not hint or not cutoff <= hint <= TODAY:
+            continue
+        pending.append({
+            "url": url,
+            "title": clean_text(item.get("title")) or "官方候选页面（标题待核验）",
+            "dateHint": hint.isoformat(),
+            "lastCheckedAt": item.get("lastFailedAt"),
+            "reason": clean_text(item.get("lastError")),
+        })
+    pending.sort(key=lambda item: (item["dateHint"], item["url"]), reverse=True)
+    return {
+        "runMode": run_mode,
+        "coverageStatus": "unavailable" if not accessible else (
+            "partial" if failed or unresolved or queue or run_mode != "scheduled" else "complete"
+        ),
+        "auditedPages": len(audits),
+        "accessiblePages": accessible,
+        "failedPages": failed,
+        "unresolvedPages": unresolved,
+        "retryQueueSize": len(queue),
+        "pendingCandidates": pending,
+    }
+
+
+def write_public_artifacts(records: list[dict], log_entry: dict, failed_sources: list[str], coverage: dict | None = None) -> None:
     PUBLIC_DATA_DIR.mkdir(parents=True, exist_ok=True)
     PUBLIC_DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
     public_records = [public_record(record) for record in records]
@@ -2141,7 +2199,7 @@ def write_public_artifacts(records: list[dict], log_entry: dict, failed_sources:
         + int(log_entry["更新旧记录数量"])
     ) > 0
     status = {
-        "status": "normal" if run_success and not failed_sources else "degraded",
+        "status": "normal" if run_success and not failed_sources and (coverage or {}).get("coverageStatus", "complete") == "complete" else "degraded",
         "lastUpdated": completed_at,
         "lastRunStartedAt": log_entry["运行日期和时间"],
         "lastRunCompletedAt": completed_at,
@@ -2169,6 +2227,7 @@ def write_public_artifacts(records: list[dict], log_entry: dict, failed_sources:
         "failedSources": failed_sources,
         "runSuccess": run_success,
         "message": log_entry["运行说明"],
+        **(coverage or {}),
     }
     os.replace(temp_json, PUBLIC_JSON_PATH)
     atomic_write_json(PUBLIC_STATUS_PATH, status)
@@ -2209,6 +2268,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--force-full", action="store_true", help="强制从 2026-01-01 全量回溯，用于审计/幂等测试")
     parser.add_argument("--start-date", help="覆盖检索起始日期，格式 YYYY-MM-DD")
     parser.add_argument("--max-pages", type=int, default=0, help="调试用：限制核验页面数；0 表示不限制")
+    parser.add_argument("--urls-file", type=Path, help="定向补录：逐条联网核验文件内的官方链接，保留历史数据与未处理重试队列")
     return parser.parse_args()
 
 
@@ -2238,11 +2298,18 @@ def main() -> int:
     existing_retry_queue = load_retry_queue()
     console(f"检索时间范围：{start_date.isoformat()} 至 {TODAY.isoformat()}（{TZ_NAME}）")
     try:
-        hits = discover_candidates(full_run, errors, existing_xlsx or existing_csv, discovery_audits)
-        historical_hits = historical_revalidation_hits(existing_xlsx or existing_csv)
-        queued_hits = retry_queue_hits(existing_retry_queue)
-        # 固定优先级：持久化失败/历史复核 > 官方栏目 > 搜索引擎。
-        hits = merge_search_hits(hits, historical_hits, queued_hits)
+        if args.urls_file:
+            urls = [normalize_url(line.strip()) for line in args.urls_file.read_text(encoding="utf-8-sig").splitlines()
+                    if line.strip() and not line.lstrip().startswith("#")]
+            if not urls or any(not is_official_url(url) for url in urls):
+                raise ValueError("定向补录文件必须包含有效的官方链接")
+            hits = [SearchHit(url=url, provider="定向官方补录", query="retry-queue") for url in dict.fromkeys(urls)]
+        else:
+            hits = discover_candidates(full_run, errors, existing_xlsx or existing_csv, discovery_audits)
+            historical_hits = historical_revalidation_hits(existing_xlsx or existing_csv)
+            queued_hits = retry_queue_hits(existing_retry_queue)
+            # 固定优先级：持久化失败/历史复核 > 官方栏目 > 搜索引擎。
+            hits = merge_search_hits(hits, historical_hits, queued_hits)
         if args.max_pages:
             hits = hits[:args.max_pages]
         console(f"发现并去重候选链接：{len(hits)} 个")
@@ -2258,17 +2325,24 @@ def main() -> int:
         audits = discovery_audits
     append_audit(audits)
     try:
-        update_retry_queue(existing_retry_queue, audits)
+        retry_queue = update_retry_queue(existing_retry_queue, audits)
         _, failed_sources = write_source_health(audits)
     except Exception as exc:
         console(f"重试队列/来源健康状态写入失败：{type(exc).__name__}: {exc}")
         return 1
     failed_count = sum(1 for record in records if record.get("页面当前状态") not in NORMAL_STATES)
     pending_count = sum(1 for record in records if record.get("核验状态") == "待核验")
+    coverage = build_search_coverage(audits, retry_queue, "targeted" if args.urls_file or args.max_pages else "scheduled", records)
     if stats["new_full"] + stats["new_clue"] == 0:
         run_note = "本次检索未发现符合收录标准的新文书。"
     else:
         run_note = "已完成候选发现、逐条访问核验、去重、关联和历史数据增量写入。"
+    if coverage["coverageStatus"] != "complete":
+        run_note = (
+            f"本次已核验来源新增{stats['new_full'] + stats['new_clue']}份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。"
+            f"本轮可访问{coverage['accessiblePages']}页，访问失败{coverage['failedPages']}页，持久化待复核{coverage['retryQueueSize']}个链接。"
+            + ("本次为定向补录，未执行全国全量检索。" if args.urls_file else "")
+        )
     log_entry = {
         "运行日期和时间": RUN_NOW.isoformat(timespec="seconds"),
         "检索时间范围": f"{start_date.isoformat()} 至 {TODAY.isoformat()}",
@@ -2289,7 +2363,7 @@ def main() -> int:
     try:
         write_csv(CSV_PATH, records)
         write_workbook(XLSX_PATH, records, logs)
-        write_public_artifacts(records, log_entry, failed_sources)
+        write_public_artifacts(records, log_entry, failed_sources, coverage)
     except Exception as exc:
         console(f"输出失败：{type(exc).__name__}: {exc}")
         return 1

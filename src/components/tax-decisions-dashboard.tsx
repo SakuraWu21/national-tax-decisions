@@ -296,7 +296,10 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
   const updateDelayed =
     Number.isFinite(lastSuccessfulTimestamp)
     && freshnessCheckedAt - lastSuccessfulTimestamp > 26 * 60 * 60 * 1000;
-  const statusDegraded = status.status === "degraded" || updateDelayed;
+  const coverageIncomplete = status.coverageStatus
+    ? status.coverageStatus !== "complete"
+    : status.failedSources.length > 0 || !status.runSuccess;
+  const statusDegraded = status.status === "degraded" || updateDelayed || coverageIncomplete;
   const dataVersion = status.sourceCommit || status.lastUpdated;
 
   return (
@@ -329,7 +332,7 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
                   />
                   {updateDelayed ? "自动更新延迟" : status.status === "normal" ? "数据正常" : "部分来源待恢复"}
                 </span>
-                <span>最近成功检索：{formatDateTime(status.lastSuccessfulRunAt)}</span>
+                <span>最近任务完成：{formatDateTime(status.lastRunCompletedAt)}</span>
                 <span>
                   最近生产部署：
                   {status.lastProductionDeploymentAt ? formatDateTime(status.lastProductionDeploymentAt) : "等待首次部署"}
@@ -414,11 +417,44 @@ export function TaxDecisionsDashboard({ initialParams }: { initialParams: Record
           ))}
         </section>
 
-        {status.todayNew === 0 && (
+        {coverageIncomplete && (
+          <Alert className="border-amber-300 bg-amber-50 text-amber-950">
+            <AlertCircle className="size-4 text-amber-700" />
+            <AlertTitle>检索覆盖不完整，不能确认其他日期没有新文书</AlertTitle>
+            <AlertDescription className="block space-y-2">
+              <p>
+                {status.runMode === "targeted" ? "最近一次为定向补录。" : "部分官网未能完成访问或解析。"}
+                本轮可访问 {status.accessiblePages ?? "—"} 页、访问失败 {status.failedPages ?? "—"} 页；
+                待重试 {status.retryQueueSize ?? "—"} 个链接。已核实的文书照常展示，未核实候选不计入收录数量。
+              </p>
+              {!!status.pendingCandidates?.length && (
+                <details>
+                  <summary className="cursor-pointer font-medium">
+                    查看近14天待复核的官方候选链接（{status.pendingCandidates.length}个）
+                  </summary>
+                  <p className="my-2 text-xs">下列日期仅来自链接路径，不是已核实的官方发布日期；这些候选尚不能认定为符合收录标准的决定书。</p>
+                  <ul className="max-h-64 space-y-2 overflow-y-auto pr-2 text-xs">
+                    {status.pendingCandidates.map((candidate) => (
+                      <li key={candidate.url} className="break-words">
+                        <span className="mr-2 font-mono">{candidate.dateHint}</span>
+                        <a className="underline underline-offset-2" href={candidate.url} target="_blank" rel="noopener noreferrer">
+                          {candidate.title}
+                        </a>
+                        <span className="ml-2">（待复核，暂未计入）</span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {status.todayNew === 0 && !coverageIncomplete && (
           <Alert className="border-blue-100 bg-blue-50/70 text-blue-900">
             <CircleCheck className="size-4 text-blue-600" />
             <AlertTitle>今日暂无新增文书</AlertTitle>
-            <AlertDescription>定时检索已正常完成，历史记录与本次运行日志均已保留。</AlertDescription>
+            <AlertDescription>本轮已检查来源未发现符合收录标准的新文书，历史记录与运行日志均已保留。</AlertDescription>
           </Alert>
         )}
 
