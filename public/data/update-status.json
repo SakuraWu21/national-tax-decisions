@@ -1,18 +1,18 @@
 {
   "status": "degraded",
-  "lastUpdated": "2026-08-31T19:09:25+08:00",
-  "lastRunStartedAt": "2026-08-31T18:47:34+08:00",
-  "lastRunCompletedAt": "2026-08-31T19:09:25+08:00",
-  "lastSuccessfulRunAt": "2026-08-31T19:09:25+08:00",
+  "lastUpdated": "2026-08-31T19:39:13+08:00",
+  "lastRunStartedAt": "2026-08-31T19:15:28+08:00",
+  "lastRunCompletedAt": "2026-08-31T19:39:13+08:00",
+  "lastSuccessfulRunAt": "2026-08-31T19:39:13+08:00",
   "lastDataChangeAt": "2026-08-31T19:09:25+08:00",
   "lastProductionDeploymentAt": null,
   "sourceCommit": "ceae794f400fb971edaf79103bb06f175554b16d",
-  "workflowRunId": "33383970979",
+  "workflowRunId": "33385301163",
   "deploymentStatus": "pending",
   "timezone": "Asia/Shanghai",
   "nextScheduledUpdate": "每日 12:07 主任务；12:37 补偿任务（北京时间）",
   "searchRange": "2026-08-24 至 2026-08-31",
-  "searchedPages": 279,
+  "searchedPages": 283,
   "total": 116,
   "todayNew": 0,
   "completeDocuments": 49,
@@ -22,7 +22,7 @@
   "newCompleteDocuments": 0,
   "newClues": 0,
   "newRecords": 0,
-  "updatedRecords": 7,
+  "updatedRecords": 0,
   "duplicateRecords": 7,
   "failedSources": [
     "福建省",
@@ -52,159 +52,174 @@
     "湖北省",
     "mof.gov.cn",
     "四川省",
-    "stats.gov.cn",
     "新疆维吾尔自治区",
+    "stats.gov.cn",
     "suining.gov.cn",
-    "云南省"
+    "云南省",
+    "gtm-cn-2r42yzjvn0s.jiangsu.chinatax.gov.cn"
   ],
   "runSuccess": true,
-  "message": "本次已核验来源新增0份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问19页，访问失败260页，持久化待复核245个链接。",
+  "message": "本次已核验来源新增0份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问19页，访问失败264页，持久化待复核249个链接。",
   "runMode": "scheduled",
   "coverageStatus": "partial",
-  "auditedPages": 294,
+  "auditedPages": 298,
   "accessiblePages": 19,
-  "failedPages": 260,
+  "failedPages": 264,
   "unresolvedPages": 0,
-  "retryQueueSize": 245,
+  "retryQueueSize": 249,
   "pendingCandidates": [
     {
       "url": "https://jiangsu.chinatax.gov.cn/art/2026/8/27/art_9432_1777559.html",
       "title": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务...",
       "dateHint": "2026-08-27",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/8/27/art_9432_1777559.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+    },
+    {
+      "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202608/t20260825_90778921.html",
+      "title": "国家 税务 总局贵阳市税务局稽查局《税务行政处罚 决定书 》 送达公告",
+      "dateHint": "2026-08-25",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
+      "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202608/t20260825_90778921.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202608/t20260825_90778908.html",
       "title": "国家 税务 总局贵阳市税务局稽查局《税务行政处罚 决定书 》 送达公告",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202608/t20260825_90778908.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202608/t20260825_90778002.html",
       "title": "国家税务总局贵阳市税务局第三稽查局关于送达 税务处理决定书 ...",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202608/t20260825_90778002.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202608/t20260825_439042.html",
       "title": "国家 税务 总局南宁市税务局第三稽查局 税务文书送达公告_国家税务...",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /nanning/xxgk/swjcgg/202608/t20260825_439042.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260825_439021.html",
       "title": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕49号)",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260825_439021.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260825_439020.html",
       "title": "国家 税务 总局河池市税务局第二稽查局税务文书 送达公告 (河市税二稽...",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260825_439020.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
+    },
+    {
+      "url": "https://jiangsu.chinatax.gov.cn/art/2026/8/24/art_9363_1777021.html",
+      "title": "...通知公告 国家 税务 总局苏州市税务局稽查局税务文书 送达公告 ...",
+      "dateHint": "2026-08-24",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
+      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/8/24/art_9363_1777021.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260824_438985.html",
       "title": "国家税务总局河池市税务局稽查局税务稽查文书送达公告(河市税稽公告〔2026〕33号)",
       "dateHint": "2026-08-24",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260824_438985.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260824_438984.html",
       "title": "国家税务总局河池市税务局稽查局税务稽查文书送达公告(河市税稽公告〔2026〕32号)",
       "dateHint": "2026-08-24",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260824_438984.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260824_438968.html",
       "title": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕44号)",
       "dateHint": "2026-08-24",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260824_438968.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260824_438967.html",
       "title": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕43号)",
       "dateHint": "2026-08-24",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260824_438967.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260824_438966.html",
       "title": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕42号)",
       "dateHint": "2026-08-24",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260824_438966.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260821_438948.html",
       "title": "国家税务总局河池市税务局第二稽查局税务稽查文书送达公告 (河市税二稽公告〔2026..",
       "dateHint": "2026-08-21",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260821_438948.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://liaoning.chinatax.gov.cn/art/2026/8/19/art_590_173411.html",
       "title": "...通知 公告 国家税务总局营口市税务局稽查局《 税务处理决定书 ...",
       "dateHint": "2026-08-19",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
-      "reason": "暂时无法访问"
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
+      "reason": "ConnectTimeout: HTTPSConnectionPool(host='liaoning.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/8/19/art_590_173411.html (Caused by ConnectTimeoutError(<HTTPSConnection(host='liaoning.chinatax.gov.cn', port=443) at 0x7f69f81f5bb0>, 'Connection to liaoning.chinatax.gov.cn timed out. (connect timeout=9)'))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260819_438797.html",
       "title": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕46号)",
       "dateHint": "2026-08-19",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260819_438797.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260819_438796.html",
       "title": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕45号)",
       "dateHint": "2026-08-19",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260819_438796.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202608/t20260819_438795.html",
       "title": "国家 税务 总局河池市税务局第二稽查局税务文书 送达公告 (河市税二稽...",
       "dateHint": "2026-08-19",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guangxi.chinatax.gov.cn', port=443): Max retries exceeded with url: /hechi/tzgg_15562/tzgg_15563/202608/t20260819_438795.html (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
     },
     {
       "url": "http://heilongjiang.chinatax.gov.cn/art/2026/8/18/art_17390_595698.html",
       "title": "国家税务总局黑龙江省税务局 双随机、一公开 2026 年国家税务总局...",
       "dateHint": "2026-08-18",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://liaoning.chinatax.gov.cn/art/2026/8/17/art_553_173277.html",
       "title": "国家 税务 总局辽宁省税务局 通知公告 国家税务总局锦州市税务局第...",
       "dateHint": "2026-08-17",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
-      "reason": "暂时无法访问"
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
+      "reason": "ConnectTimeout: HTTPSConnectionPool(host='liaoning.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/8/17/art_553_173277.html (Caused by ConnectTimeoutError(<HTTPSConnection(host='liaoning.chinatax.gov.cn', port=443) at 0x7f69f81f7f80>, 'Connection to liaoning.chinatax.gov.cn timed out. (connect timeout=9)'))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/zhengzhou/2026/08-17/140753.html",
       "title": "...局第一稽查局关于送达河南优厚祥贸易有限公司《 税务处理决定书 ...",
       "dateHint": "2026-08-17",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /zhengzhou/2026/08-17/140753.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/shangqiu/2026/08-17/140719.html",
       "title": "...税务文书送达公告 商 税 三 稽 公[ 2026 ]15号 - 国家税务总局商丘市...",
       "dateHint": "2026-08-17",
-      "lastCheckedAt": "2026-08-31T19:09:24+08:00",
+      "lastCheckedAt": "2026-08-31T19:39:12+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/08-17/140719.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     }
   ]
