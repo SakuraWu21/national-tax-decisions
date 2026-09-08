@@ -1,5 +1,79 @@
 [
   {
+    "id": "DOC-2b30562ace853138",
+    "caseGroupId": "CASE-c4d62485c5061fec",
+    "province": "广西壮族自治区",
+    "city": "河池市",
+    "district": null,
+    "issuingAuthority": "国家税务总局河池市税务局第二稽查局",
+    "inspectionAuthority": "国家税务总局河池市税务局第二稽查局",
+    "partyName": "广西森荷嘉商贸有限公司",
+    "unifiedSocialCreditCode": "91451202MAK7NNU76X",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "河市税二稽处〔2026〕20号",
+    "relatedTreatmentDocumentNumber": "河市税二稽处〔2026〕20号",
+    "relatedPenaltyDocumentNumber": "河市税二稽罚〔2026〕12号",
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-08",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-08",
+    "lastVerifiedDate": "2026-09-08",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202609/t20260908_439655.html",
+    "attachmentUrl": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202609/P020260908315250202205.doc",
+    "backupUrl": null,
+    "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕54号)_国家税务总局河池市税务局",
+    "pageStatus": "附件正常",
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+  },
+  {
+    "id": "DOC-ac20fe23c905098a",
+    "caseGroupId": "CASE-c4d62485c5061fec",
+    "province": "广西壮族自治区",
+    "city": "河池市",
+    "district": null,
+    "issuingAuthority": "国家税务总局河池市税务局第二稽查局",
+    "inspectionAuthority": "国家税务总局河池市税务局第二稽查局",
+    "partyName": "广西森荷嘉商贸有限公司",
+    "unifiedSocialCreditCode": "91451202MAK7NNU76X",
+    "legalRepresentative": null,
+    "documentType": "税务行政处罚决定书",
+    "documentNumber": "河市税二稽罚〔2026〕12号",
+    "relatedTreatmentDocumentNumber": "河市税二稽处〔2026〕20号",
+    "relatedPenaltyDocumentNumber": "河市税二稽罚〔2026〕12号",
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-08",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-08",
+    "lastVerifiedDate": "2026-09-08",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202609/t20260908_439655.html",
+    "attachmentUrl": "https://guangxi.chinatax.gov.cn/hechi/tzgg_15562/tzgg_15563/202609/P020260908315250221290.doc",
+    "backupUrl": null,
+    "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕54号)_国家税务总局河池市税务局",
+    "pageStatus": "附件正常",
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+  },
+  {
     "id": "DOC-6faa8e91d2d01cfc",
     "caseGroupId": "CASE-3035fea02bd88955",
     "province": "广西壮族自治区",
@@ -25,7 +99,7 @@
     "officialPublishDate": "2026-09-04",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-04",
-    "lastVerifiedDate": "2026-09-07",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -35,6 +109,43 @@
     "pageTitle": "国家税务总局防城港市税务局稽查局税务文书送达公告_国家税务总局防城港市税务局",
     "pageStatus": "附件正常",
     "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
+  },
+  {
+    "id": "DOC-fb5d7fb497514b3f",
+    "caseGroupId": "CASE-71b9505e2e2967d1",
+    "province": "江苏省",
+    "city": "无锡市",
+    "district": null,
+    "issuingAuthority": "国家税务总局无锡市税务局第二稽查局",
+    "inspectionAuthority": "国家税务总局无锡市税务局第二稽查局",
+    "partyName": "江阴市凯竹贸易有限公司",
+    "unifiedSocialCreditCode": "9132028108939149XB",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "锡税二稽处〔2026〕174号",
+    "relatedTreatmentDocumentNumber": "锡税二稽处〔2026〕174号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-04",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-08",
+    "lastVerifiedDate": "2026-09-08",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://jiangsu.chinatax.gov.cn/art/2026/9/4/art_9193_1780131.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局无锡市税务局第二稽查局关于送达税务处理决定书的公告(江阴市凯竹贸易有限公司)",
+    "pageStatus": "正常",
+    "notes": null
   },
   {
     "id": "DOC-21bb448ffe4fcc22",
@@ -71,7 +182,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局常州市税务局第一稽查局关于送达常州章子医疗器械有限公司《税务处理决定书》的公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-67d628d35f0083ff",
@@ -108,7 +219,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局徐州市税务局稽查局关于送达徐州步柘商贸有限公司税务处理决定书的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-956f0cdca4b2ba1e",
@@ -145,7 +256,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局淮安市税务局第一稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-575aabafa2005dfa",
@@ -182,7 +293,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局淮安市税务局第一稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-6a1380433c1c115d",
@@ -219,7 +330,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局淮安市税务局第一稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-6237d020048b032a",
@@ -247,7 +358,7 @@
     "officialPublishDate": "2026-08-28",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-03",
-    "lastVerifiedDate": "2026-09-04",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -284,7 +395,7 @@
     "officialPublishDate": "2026-08-28",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-03",
-    "lastVerifiedDate": "2026-09-04",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -330,7 +441,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务局稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-c871e97de86cef12",
@@ -367,7 +478,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务局稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-60815774039040d1",
@@ -700,7 +811,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局苏州市税务局稽查局税务文书送达公告(2026年第69号)",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-054ef3d88556800a",
@@ -737,7 +848,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局苏州市税务局稽查局税务文书送达公告(2026年第69号)",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-3d039b043ff184e8",
@@ -876,7 +987,7 @@
     "officialPublishDate": "2026-08-19",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-07",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -913,7 +1024,7 @@
     "officialPublishDate": "2026-08-19",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-07",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -2652,7 +2763,7 @@
     "officialPublishDate": "2026-07-29",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-07-31",
-    "lastVerifiedDate": "2026-09-07",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "完整文书",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -4206,7 +4317,7 @@
     "officialPublishDate": "2026-04-07",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-07-26",
-    "lastVerifiedDate": "2026-09-06",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -4243,7 +4354,7 @@
     "officialPublishDate": "2026-04-07",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-07-26",
-    "lastVerifiedDate": "2026-09-06",
+    "lastVerifiedDate": "2026-09-08",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -4733,7 +4844,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局连云港市税务局第一稽查局税务处理决定书送达公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-a8b21140da417008",
