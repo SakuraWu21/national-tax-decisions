@@ -1,36 +1,35 @@
 {
   "status": "degraded",
-  "lastUpdated": "2026-09-07T18:16:52+08:00",
-  "lastRunStartedAt": "2026-09-07T17:49:47+08:00",
-  "lastRunCompletedAt": "2026-09-07T18:16:52+08:00",
-  "lastSuccessfulRunAt": "2026-09-07T18:16:52+08:00",
-  "lastDataChangeAt": "2026-09-07T18:16:52+08:00",
+  "lastUpdated": "2026-09-08T17:02:07+08:00",
+  "lastRunStartedAt": "2026-09-08T16:49:32+08:00",
+  "lastRunCompletedAt": "2026-09-08T17:02:07+08:00",
+  "lastSuccessfulRunAt": "2026-09-08T17:02:07+08:00",
+  "lastDataChangeAt": "2026-09-08T17:02:07+08:00",
   "lastProductionDeploymentAt": null,
-  "sourceCommit": "9c39dabc1fd8c1fc7b5aa8e28c9caf39b2558cec",
-  "workflowRunId": "34107087684",
+  "sourceCommit": "becf4d177d3c62316d6ec3f68bd8fa0d1617b59f",
+  "workflowRunId": "34206563333",
   "deploymentStatus": "pending",
   "timezone": "Asia/Shanghai",
   "nextScheduledUpdate": "每日 12:07 主任务；12:37 补偿任务（北京时间）",
-  "searchRange": "2026-08-31 至 2026-09-07",
+  "searchRange": "2026-09-01 至 2026-09-08",
   "searchedPages": 307,
-  "total": 127,
-  "todayNew": 0,
-  "completeDocuments": 49,
-  "clues": 78,
+  "total": 137,
+  "todayNew": 10,
+  "completeDocuments": 52,
+  "clues": 85,
   "pending": 8,
   "invalidLinks": 3,
-  "newCompleteDocuments": 0,
-  "newClues": 0,
-  "newRecords": 0,
-  "updatedRecords": 2,
-  "duplicateRecords": 13,
+  "newCompleteDocuments": 3,
+  "newClues": 7,
+  "newRecords": 10,
+  "updatedRecords": 15,
+  "duplicateRecords": 15,
   "failedSources": [
     "福建省",
     "河南省",
     "贵州省",
     "广西壮族自治区",
     "广东省",
-    "江苏省",
     "浙江省",
     "山东省",
     "北京市",
@@ -49,11 +48,10 @@
     "江西省",
     "gov.cn",
     "gsxt.gov.cn",
-    "gtm-cn-2r42yzjvn0s.jiangsu.chinatax.gov.cn",
     "海南省",
     "ja.gov.cn",
-    "湖北省",
     "mof.gov.cn",
+    "湖北省",
     "四川省",
     "新疆维吾尔自治区",
     "stats.gov.cn",
@@ -61,133 +59,168 @@
     "云南省"
   ],
   "runSuccess": true,
-  "message": "本次已核验来源新增0份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问52页，访问失败254页，持久化待复核248个链接。",
+  "message": "本次已核验来源新增10份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问62页，访问失败232页，持久化待复核223个链接。",
   "runMode": "scheduled",
   "coverageStatus": "partial",
-  "auditedPages": 316,
-  "accessiblePages": 52,
-  "failedPages": 254,
-  "unresolvedPages": 3,
-  "retryQueueSize": 248,
+  "auditedPages": 318,
+  "accessiblePages": 62,
+  "failedPages": 232,
+  "unresolvedPages": 2,
+  "retryQueueSize": 223,
   "pendingCandidates": [
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439636.html",
+      "title": "国家税务总局南宁市税务局第一稽查局税务文书送达公告(南宁智冀辉商贸有限公..",
+      "dateHint": "2026-09-07",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(2280 bytes read, 391 more expected)', IncompleteRead(2280 bytes read, 391 more expected))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439635.html",
+      "title": "国家税务总局南宁市税务局第一稽查局税务文书送达公告(广西益本利贸易有限公..",
+      "dateHint": "2026-09-07",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(3784 bytes read, 4352 more expected)', IncompleteRead(3784 bytes read, 4352 more expected))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439614.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(广西栾哼供应链有限..",
+      "dateHint": "2026-09-07",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(1046 bytes read, 2749 more expected)', IncompleteRead(1046 bytes read, 2749 more expected))"
+    },
     {
       "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439576.html",
       "title": "国家税务总局南宁市税务局第二稽查局税务文书送达公告_国家税务总局南宁市税务局",
       "dateHint": "2026-09-07",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "无法确认当事人"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439569.html",
       "title": "国家税务总局南宁市税务局第二稽查局税务文书送达公告_国家税务总局南宁市税务局",
       "dateHint": "2026-09-07",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "无法确认当事人"
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(3784 bytes read, 4352 more expected)', IncompleteRead(3784 bytes read, 4352 more expected))"
     },
     {
-      "url": "https://jiangsu.chinatax.gov.cn/art/2026/9/3/art_9566_1779871.html",
-      "title": "...通知公告 国家 税务 总局淮安市税务局第一稽查局税务文书 送达公告",
-      "dateHint": "2026-09-03",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/9/3/art_9566_1779871.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260904_439531.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(广西泰之昱运输有限..",
+      "dateHint": "2026-09-04",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(138 bytes read, 1020 more expected)', IncompleteRead(138 bytes read, 1020 more expected))"
     },
     {
-      "url": "https://jiangsu.chinatax.gov.cn/art/2026/9/3/art_9280_1779828.html",
-      "title": "...局关于 送达 常州章子医疗器械有限公司《 税务处理决定书 》的 公告",
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260903_439464.html",
+      "title": "国家税务总局南宁市税务局第一稽查局税务文书送达公告(广西恒磊建材工贸有限..",
       "dateHint": "2026-09-03",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/9/3/art_9280_1779828.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
-    },
-    {
-      "url": "https://jiangsu.chinatax.gov.cn/art/2026/9/3/art_9223_1779776.html",
-      "title": "...税务局稽查局关于 送达 徐州步柘商贸有限公司 税务处理决定书 的 公告",
-      "dateHint": "2026-09-03",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/9/3/art_9223_1779776.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(2058 bytes read, 1737 more expected)', IncompleteRead(2058 bytes read, 1737 more expected))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202609/t20260902_90807765.html",
       "title": "...二稽查局《 税务处理决定书 》《不予税务行政处罚决定书》 送达公告",
       "dateHint": "2026-09-02",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202609/t20260902_90807765.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://yunnan.chinatax.gov.cn/art/2026/9/1/art_3927_90923.html",
       "title": "国家税务总局云南省税务局 通知公告 税务检查证遗失公告",
       "dateHint": "2026-09-01",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='yunnan.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/9/1/art_3927_90923.html (Caused by ReadTimeoutError(\"HTTPSConnectionPool(host='yunnan.chinatax.gov.cn', port=443): Read timed out. (read timeout=28)\"))"
-    },
-    {
-      "url": "https://jiangsu.chinatax.gov.cn/art/2026/9/1/art_9566_1778941.html",
-      "title": "...通知公告 国家 税务 总局淮安市税务局第一稽查局税务文书 送达公告",
-      "dateHint": "2026-09-01",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/9/1/art_9566_1778941.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202609/t20260901_90803092.html",
       "title": "国家税务总局贵阳市税务局稽查局《税务检查通知书》送达公告",
       "dateHint": "2026-09-01",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202609/t20260901_90803092.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260901_439312.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(广西胜河服科技有限..",
+      "dateHint": "2026-09-01",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(378 bytes read, 3417 more expected)', IncompleteRead(378 bytes read, 3417 more expected))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260901_439311.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(南宁市闽端五金机电..",
+      "dateHint": "2026-09-01",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(199 bytes read, 3596 more expected)', IncompleteRead(199 bytes read, 3596 more expected))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260901_439309.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(广西立资商贸有限公..",
+      "dateHint": "2026-09-01",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(1402 bytes read, 990 more expected)', IncompleteRead(1402 bytes read, 990 more expected))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260901_439308.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(广西豪之银科技有限..",
+      "dateHint": "2026-09-01",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(2900 bytes read, 4911 more expected)', IncompleteRead(2900 bytes read, 4911 more expected))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260901_439307.html",
+      "title": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(广西贵浩信贸易有限..",
+      "dateHint": "2026-09-01",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(7163 bytes read, 973 more expected)', IncompleteRead(7163 bytes read, 973 more expected))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/shangqiu/2026/08-31/141107.html",
       "title": "国家 税务 总局商丘市税务局第三稽查局 税务文书 送达公告 商税三稽...",
       "dateHint": "2026-08-31",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/08-31/141107.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
+    },
+    {
+      "url": "https://guangxi.chinatax.gov.cn/chongzuo/xxgk_15621/swjcgg/202608/t20260831_439253.html",
+      "title": "国家税务总局崇左市税务局稽查局税务文书送达公告",
+      "dateHint": "2026-08-31",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
+      "reason": "ChunkedEncodingError: ('Connection broken: IncompleteRead(3030 bytes read, 765 more expected)', IncompleteRead(3030 bytes read, 765 more expected))"
     },
     {
       "url": "https://xinjiang.chinatax.gov.cn/kfq/tzgg/202608/t20260828_160350.html",
       "title": "...开发区(头屯河区)税务局稽查局关于 送达 《 税务处理决定书 》的 公告",
       "dateHint": "2026-08-28",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://xinjiang.chinatax.gov.cn/gxq/tzgg/202608/t20260828_160359.html",
       "title": "...高新技术产业开发区(新市区) 税务 局稽查局税务文书 送达公告",
       "dateHint": "2026-08-28",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "暂时无法访问"
-    },
-    {
-      "url": "https://jiangsu.chinatax.gov.cn/art/2026/8/27/art_9432_1777559.html",
-      "title": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务...",
-      "dateHint": "2026-08-27",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/8/27/art_9432_1777559.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202608/t20260825_90778921.html",
       "title": "国家 税务 总局贵阳市税务局稽查局《税务行政处罚 决定书 》 送达公告",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202608/t20260825_90778921.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202608/t20260825_90778908.html",
       "title": "国家 税务 总局贵阳市税务局稽查局《税务行政处罚 决定书 》 送达公告",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202608/t20260825_90778908.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202608/t20260825_90778002.html",
       "title": "国家税务总局贵阳市税务局第三稽查局关于送达 税务处理决定书 ...",
       "dateHint": "2026-08-25",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
+      "lastCheckedAt": "2026-09-08T17:02:06+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202608/t20260825_90778002.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
-    },
-    {
-      "url": "https://jiangsu.chinatax.gov.cn/art/2026/8/24/art_9363_1777021.html",
-      "title": "...通知公告 国家 税务 总局苏州市税务局稽查局税务文书 送达公告 ...",
-      "dateHint": "2026-08-24",
-      "lastCheckedAt": "2026-09-07T18:16:51+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='jiangsu.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/8/24/art_9363_1777021.html (Caused by NewConnectionError(\"HTTPSConnection(host='jiangsu.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     }
   ]
 }
