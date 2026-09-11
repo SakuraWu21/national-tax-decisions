@@ -1,29 +1,29 @@
 {
   "status": "degraded",
-  "lastUpdated": "2026-09-10T17:24:24+08:00",
-  "lastRunStartedAt": "2026-09-10T17:11:33+08:00",
-  "lastRunCompletedAt": "2026-09-10T17:24:24+08:00",
-  "lastSuccessfulRunAt": "2026-09-10T17:24:24+08:00",
-  "lastDataChangeAt": "2026-09-10T17:24:24+08:00",
+  "lastUpdated": "2026-09-11T17:06:55+08:00",
+  "lastRunStartedAt": "2026-09-11T16:52:45+08:00",
+  "lastRunCompletedAt": "2026-09-11T17:06:55+08:00",
+  "lastSuccessfulRunAt": "2026-09-11T17:06:55+08:00",
+  "lastDataChangeAt": "2026-09-11T17:06:55+08:00",
   "lastProductionDeploymentAt": null,
-  "sourceCommit": "540a9b57c5c9aa7c3805531d004e20cfcab8e9af",
-  "workflowRunId": "34458712407",
+  "sourceCommit": "987a56e0acdcd427909207fb0761000505102655",
+  "workflowRunId": "34581314037",
   "deploymentStatus": "pending",
   "timezone": "Asia/Shanghai",
   "nextScheduledUpdate": "每日 12:07 主任务；12:37 补偿任务（北京时间）",
-  "searchRange": "2026-09-03 至 2026-09-10",
-  "searchedPages": 283,
+  "searchRange": "2026-09-04 至 2026-09-11",
+  "searchedPages": 295,
   "total": 145,
-  "todayNew": 3,
+  "todayNew": 0,
   "completeDocuments": 54,
   "clues": 91,
   "pending": 8,
   "invalidLinks": 3,
-  "newCompleteDocuments": 2,
-  "newClues": 1,
-  "newRecords": 3,
-  "updatedRecords": 4,
-  "duplicateRecords": 20,
+  "newCompleteDocuments": 0,
+  "newClues": 0,
+  "newRecords": 0,
+  "updatedRecords": 15,
+  "duplicateRecords": 16,
   "failedSources": [
     "福建省",
     "河南省",
@@ -31,6 +31,7 @@
     "广西壮族自治区",
     "广东省",
     "浙江省",
+    "青海省",
     "山东省",
     "北京市",
     "cktsycsb.jilin.chinatax.gov.cn",
@@ -59,104 +60,104 @@
     "云南省"
   ],
   "runSuccess": true,
-  "message": "本次已核验来源新增3份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问73页，访问失败207页，持久化待复核201个链接。",
+  "message": "本次已核验来源新增0份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问73页，访问失败213页，持久化待复核207个链接。",
   "runMode": "scheduled",
   "coverageStatus": "partial",
-  "auditedPages": 292,
+  "auditedPages": 305,
   "accessiblePages": 73,
-  "failedPages": 207,
+  "failedPages": 213,
   "unresolvedPages": 3,
-  "retryQueueSize": 201,
+  "retryQueueSize": 207,
   "pendingCandidates": [
     {
       "url": "https://henan.chinatax.gov.cn/shangqiu/2026/09-09/141473.html",
       "title": "ňŤŻň«Â šĘÄňŐí ŠÇ╗ň▒ÇňĽćńŞśňŞéšĘÄňŐíň▒ÇšČČńŞëšĘŻŠčąň▒Ç šĘÄňŐíŠľçń╣Ž ÚÇüŔżżňůČňĹŐ ňĽćšĘÄńŞëšĘŻ...",
       "dateHint": "2026-09-09",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/09-09/141473.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://anhui.chinatax.gov.cn/art/2026/9/9/art_9502_1323824.html",
       "title": "...国家税务总局淮北市税务局稽查局关于送达《 税务处理决定书 》的...",
       "dateHint": "2026-09-09",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://henan.chinatax.gov.cn/shangqiu/2026/09-08/141421.html",
       "title": "国家税务总局商丘市税务局稽查局 税务文书送达公告 商 税稽 公[2026...",
       "dateHint": "2026-09-08",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/09-08/141421.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439576.html",
       "title": "国家税务总局南宁市税务局第二稽查局税务文书送达公告_国家税务总局南宁市税务局",
       "dateHint": "2026-09-07",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "无法确认当事人"
     },
     {
       "url": "https://guangxi.chinatax.gov.cn/nanning/xxgk/swjcgg/202609/t20260907_439569.html",
       "title": "国家税务总局南宁市税务局第二稽查局税务文书送达公告_国家税务总局南宁市税务局",
       "dateHint": "2026-09-07",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "无法确认当事人"
     },
     {
       "url": "https://henan.chinatax.gov.cn/zhengzhou/2026/09-03/141280.html",
       "title": "...局第二 稽查局 关于送达河南宽泓物流有限公司《 税务处理决定书 ...",
       "dateHint": "2026-09-03",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /zhengzhou/2026/09-03/141280.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202609/t20260902_90807765.html",
       "title": "...二稽查局《 税务处理决定书 》《不予税务行政处罚决定书》 送达公告",
       "dateHint": "2026-09-02",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202609/t20260902_90807765.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://yunnan.chinatax.gov.cn/art/2026/9/1/art_3927_90923.html",
       "title": "国家税务总局云南省税务局 通知公告 税务检查证遗失公告",
       "dateHint": "2026-09-01",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='yunnan.chinatax.gov.cn', port=443): Max retries exceeded with url: /art/2026/9/1/art_3927_90923.html (Caused by ReadTimeoutError(\"HTTPSConnectionPool(host='yunnan.chinatax.gov.cn', port=443): Read timed out. (read timeout=28)\"))"
     },
     {
       "url": "https://xinjiang.chinatax.gov.cn/hms/tzgg/202609/t20260901_160423.html",
       "title": "国家税务总局哈密市税务局-通知公告-国家税务总局哈密市税务局...",
       "dateHint": "2026-09-01",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://guizhou.chinatax.gov.cn/sjpd/gys/tzgg_59631/202609/t20260901_90803092.html",
       "title": "国家税务总局贵阳市税务局稽查局《税务检查通知书》送达公告",
       "dateHint": "2026-09-01",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/gys/tzgg_59631/202609/t20260901_90803092.html (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/shangqiu/2026/08-31/141107.html",
       "title": "国家 税务 总局商丘市税务局第三稽查局 税务文书 送达公告 商税三稽...",
       "dateHint": "2026-08-31",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/08-31/141107.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://xinjiang.chinatax.gov.cn/kfq/tzgg/202608/t20260828_160350.html",
       "title": "...开发区(头屯河区)税务局稽查局关于 送达 《 税务处理决定书 》的 公告",
       "dateHint": "2026-08-28",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://xinjiang.chinatax.gov.cn/gxq/tzgg/202608/t20260828_160359.html",
       "title": "...高新技术产业开发区(新市区) 税务 局稽查局税务文书 送达公告",
       "dateHint": "2026-08-28",
-      "lastCheckedAt": "2026-09-10T17:24:24+08:00",
+      "lastCheckedAt": "2026-09-11T17:06:54+08:00",
       "reason": "暂时无法访问"
     }
   ]
