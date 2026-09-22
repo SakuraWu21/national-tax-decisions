@@ -1,5 +1,79 @@
 [
   {
+    "id": "DOC-fcc2c83b34fd6af2",
+    "caseGroupId": "CASE-e5ccdfa1cc0dea3d",
+    "province": "广西壮族自治区",
+    "city": "北海市",
+    "district": "海城区",
+    "issuingAuthority": "国家税务总局北海市税务局稽查局",
+    "inspectionAuthority": "国家税务总局北海市税务局稽查局",
+    "partyName": "北海广聚源商贸有限公司",
+    "unifiedSocialCreditCode": "91450502MAEU97R264",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "北市税稽处〔2026〕19号",
+    "relatedTreatmentDocumentNumber": "北市税稽处〔2026〕19号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": "检查人员到广西区人民银行核查你公司开户行情况,未发现你公司存在开户行,无法核实你公司资金流情况,你公司存在虚开风险 经查询你公司取得发票的情况来看,你公司未取得发票。 公司无生产能力,却为他人开具与实际经营业务情况不符的发票,属于虚开发票的行为。 根据《国家税务总局关于纳税人虚开增值税专用发票征补税款问题的公告》(国家税务总局公告2012年第33号)和《中华人民共和国增值税暂行条例》第一条、第五条的规定,应补缴所属期2025年8月增值税 公司所属期2025年8月未进行纳税申报,不缴或者少缴增值税467,184.69元,城市维护建设税32,702.93元,合计499,887.62元。 根据《中华人民共和国税收征收管理法》第六十三条第一款规定,对上述行为定性为偷税,向 公司追缴少缴的2025年8月增值税、城市维护建设税合计499,887.62元,并从税款滞纳金之日起,按日加收滞纳税款万分之五的滞纳金。 公司少缴的税款从税款滞纳之日起至实际缴纳税款之日止按日加收滞纳税款万分之五的滞纳金,滞纳金由金三系统自动计算加收。 公司无生产能力,却为他人开具与实际经营业务情况不符的发票,属于虚开发票的行为。 公司虚开发票(发票号码:25452000000093854837、25452000000093836425、25452000000093882475、25452000000093836411、25452000000093854792、25452000000093854787、25452000000093874241、25452000000093874236、25452000000093844707),金额3,593,728.11元,税额467,184.69元,合计4,060,912.80 元,将你公司依法移送司法机关处理。",
+    "taxTypes": "增值税、企业所得税、城市维护建设税、教育费附加、地方教育附加",
+    "recoveredTaxAmount": 999775.24,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": "根据《国家税务总局关于纳税人虚开增值税专用发票征补税款问题的公告》(国家税务总局公告2012年第33号)和《中华人民共和国增值税暂行条例》第一条、第五条的规定,应补缴所属期2025年8月增值税 公司所属期2025年8月应补缴增值税467,184.69元。 公司所属期2025年8月应补缴纳城市维护建设税467,184.69×7%=32,702.93元。 公司所属期2025年8月应补缴增值税467,184.69元。 公司所属期2025年8月应补缴纳教育费附加467,184.69×3%=14,015.54元。 公司所属期2025年8月应补缴增值税467,184.69元。 公司所属期2025年8月应补缴纳地方教育附加467,184.69×2%=9,343.69元。",
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-22",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-22",
+    "lastVerifiedDate": "2026-09-22",
+    "completeness": "完整文书",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://guangxi.chinatax.gov.cn/beihai/tzgg_15227/tzgg_15228/202609/t20260922_440360.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "【市稽查】国家税务总局北海市税务局稽查局税务处理决定书(北市税稽处〔2026〕19号_国家税务总局北海市税务局",
+    "pageStatus": "正常",
+    "notes": null
+  },
+  {
+    "id": "DOC-0036c1f48b9c4687",
+    "caseGroupId": "CASE-cef77d04edd95902",
+    "province": "广西壮族自治区",
+    "city": "北海市",
+    "district": "合浦县",
+    "issuingAuthority": "国家税务总局北海市税务局稽查局",
+    "inspectionAuthority": "国家税务总局北海市税务局稽查局",
+    "partyName": "广西卤溢科技有限公司",
+    "unifiedSocialCreditCode": "91450521MAK6Y7XF64",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "北市税稽处〔2026〕21号",
+    "relatedTreatmentDocumentNumber": "北市税稽处〔2026〕21号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": "你公司开具该部分增值税专用发票未申报缴纳增值税。 你公司未同主管局签订三方协议、未报告存款账户、相关人员无法联系,到中国人民银行核查你公司开户行情况,未发现你公司存在开户行,无法核实你公司资金流情况,你公司存在虚开风险。 对你公司2026年2月销售货物未申报缴纳税款的行为,根据《中华人民共和国税收征收管理法》(中华人民共和国主席令第六十号发布,中华人民共和国主席令第二十三号修订)第六十三条第一款的规定,对该行为定性偷税,向你公司追缴少缴的2026年2月增值税621883.19元、城市维护建设税31094.16元,合计652977.35元, 2026年2月少缴的教育费附加18656.5元。 2026年2月少缴的地方教育附加12437.66元。 根据《中华人民共和国税收征收管理法》第三十二条之规定,对你公司少缴的税款从税款滞纳之日起至实际缴纳税款之日止按日加收滞纳税款万分之五的滞纳金,滞纳金由金三系统自动计算加收。 1.你公司无法联系且实地核查无实际生产地址、无生产能力、查无下落,短期开票金额大,无法核实资金流,未进行纳税申报,根据《中华人民共和国发票管理办法》(财政部令第6号发布,国务院令第764号修订)第二十一条第一款的规定,你公司无实际生产经营能力却为他人开具与实际经营业务情况不符的发票,属于虚开发票的行为。 认定你公司开具的上述17份增值税专用发票为虚开发票,金额合计4783716.81元,税额合计621883.19元,价税合计5405600元。",
+    "taxTypes": "增值税、城市维护建设税、教育费附加、地方教育附加",
+    "recoveredTaxAmount": 652977.35,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-22",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-22",
+    "lastVerifiedDate": "2026-09-22",
+    "completeness": "完整文书",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://guangxi.chinatax.gov.cn/beihai/tzgg_15227/tzgg_15228/202609/t20260922_440361.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "【市稽查】国家税务总局北海市税务局稽查局税务处理决定书(北市税稽处〔2026〕21号)_国家税务总局北海市税务局",
+    "pageStatus": "正常",
+    "notes": null
+  },
+  {
     "id": "DOC-71982b3ac498ae4e",
     "caseGroupId": "CASE-051a126a96ae54d2",
     "province": "江苏省",
@@ -25,7 +99,7 @@
     "officialPublishDate": "2026-09-20",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-21",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -34,7 +108,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局苏州市税务局第一稽查局税务文书送达公告(2026年第100号)",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-2f843486fbcbe885",
@@ -62,7 +136,7 @@
     "officialPublishDate": "2026-09-20",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-21",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -71,7 +145,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局苏州市税务局第一稽查局税务文书送达公告(2026年第100号)",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-e8e289683f5f1cac",
@@ -99,7 +173,7 @@
     "officialPublishDate": "2026-09-20",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-21",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -108,7 +182,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局大连市税务局 通知公告 国家税务总局大连市税务局第三稽查局关于税务文书送达的公告(2026年第63号)",
     "pageStatus": "正常",
-    "notes": "字段“官方原文链接”存在冲突:保留原值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_1715_710590.html”,新值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_2892_710589.html”未静默覆盖。"
+    "notes": "字段“官方原文链接”存在冲突:保留原值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_1715_710590.html”,新值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_2892_710589.html”未静默覆盖。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-efd7314b853db234",
@@ -136,7 +210,7 @@
     "officialPublishDate": "2026-09-20",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-21",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -145,7 +219,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局大连市税务局 通知公告 国家税务总局大连市税务局第三稽查局关于税务文书送达的公告(2026年第63号)",
     "pageStatus": "正常",
-    "notes": "字段“官方原文链接”存在冲突:保留原值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_1715_710590.html”,新值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_2892_710589.html”未静默覆盖。"
+    "notes": "字段“官方原文链接”存在冲突:保留原值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_1715_710590.html”,新值“http://dalian.chinatax.gov.cn/art/2026/9/20/art_2892_710589.html”未静默覆盖。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-0f5aa2a9d62b35cc",
@@ -173,7 +247,7 @@
     "officialPublishDate": "2026-09-18",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-18",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -210,7 +284,7 @@
     "officialPublishDate": "2026-09-18",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-18",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -247,7 +321,7 @@
     "officialPublishDate": "2026-09-18",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-20",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "完整文书",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -293,7 +367,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务局第二稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-3f3cf9af0076185e",
@@ -330,7 +404,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务局第二稽查局税务文书送达公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-7d253a82407aafa4",
@@ -432,7 +506,7 @@
     "officialPublishDate": "2026-09-15",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-15",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -506,7 +580,7 @@
     "officialPublishDate": "2026-09-15",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-15",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -543,7 +617,7 @@
     "officialPublishDate": "2026-09-15",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-15",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -580,7 +654,7 @@
     "officialPublishDate": "2026-09-15",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-15",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -617,7 +691,7 @@
     "officialPublishDate": "2026-09-15",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-15",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -654,7 +728,7 @@
     "officialPublishDate": "2026-09-15",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-09-15",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -1514,7 +1588,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局乌鲁木齐高新区税务局-通知公告-国家税务总局乌鲁木齐高新技术产业开发区(新市区)税务局稽查局税务文书送达公告",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-b3ecc245490268ae",
@@ -1551,7 +1625,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局乌鲁木齐高新区税务局-通知公告-国家税务总局乌鲁木齐高新技术产业开发区(新市区)税务局稽查局税务文书送达公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-b6d8b615f3a842fc",
@@ -2134,7 +2208,7 @@
     "officialPublishDate": "2026-08-19",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -2171,7 +2245,7 @@
     "officialPublishDate": "2026-08-19",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -2985,7 +3059,7 @@
     "officialPublishDate": "2026-08-11",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-12",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -3947,7 +4021,7 @@
     "officialPublishDate": "2026-07-29",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-07-31",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "完整文书",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -3984,7 +4058,7 @@
     "officialPublishDate": "2026-07-28",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-04",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "待核验",
@@ -4021,7 +4095,7 @@
     "officialPublishDate": "2026-07-28",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-04",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "待核验",
@@ -4243,7 +4317,7 @@
     "officialPublishDate": "2026-07-20",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -5584,7 +5658,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局乌鲁木齐市税务局-通知公告-国家税务总局乌鲁木齐市税务局稽查局关于送达《税务处理决定书》和《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-7e3d72fa54372f41",
@@ -5621,7 +5695,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局乌鲁木齐市税务局-通知公告-国家税务总局乌鲁木齐市税务局稽查局关于送达《税务处理决定书》和《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-4c99e9a228472ee1",
@@ -5686,7 +5760,7 @@
     "officialPublishDate": "2026-03-10",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-07-26",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "待核验",
@@ -5843,7 +5917,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局巴州税务局-通知公告-国家税务总局巴音郭楞蒙古自治州税务局稽查局关于送达《税务处理决定书》《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-73007b3650cf14c2",
@@ -5880,7 +5954,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局巴州税务局-通知公告-国家税务总局巴音郭楞蒙古自治州税务局稽查局关于送达《税务处理决定书》《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-1228a9c92b2b0632",
@@ -5982,7 +6056,7 @@
     "officialPublishDate": "2026-01-26",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -6019,7 +6093,7 @@
     "officialPublishDate": "2026-01-23",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-24",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "完整文书",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -6056,7 +6130,7 @@
     "officialPublishDate": "2026-01-23",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "完整文书",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -6287,7 +6361,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局巴州税务局-通知公告-国家税务总局巴音郭楞蒙古自治州税务局稽查局关于送达《税务处理决定书》《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-65bfc2d5b7ed46f9",
@@ -6324,7 +6398,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局巴州税务局-通知公告-国家税务总局巴音郭楞蒙古自治州税务局稽查局关于送达《税务处理决定书》《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-f2643f2a0719d8d1",
@@ -6389,7 +6463,7 @@
     "officialPublishDate": "2026-01-05",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-24",
-    "lastVerifiedDate": "2026-09-21",
+    "lastVerifiedDate": "2026-09-22",
     "completeness": "完整文书",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
