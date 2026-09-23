@@ -1,20 +1,20 @@
 {
   "status": "degraded",
-  "lastUpdated": "2026-09-22T17:50:59+08:00",
-  "lastRunStartedAt": "2026-09-22T17:35:50+08:00",
-  "lastRunCompletedAt": "2026-09-22T17:50:59+08:00",
-  "lastSuccessfulRunAt": "2026-09-22T17:50:59+08:00",
-  "lastDataChangeAt": "2026-09-22T17:50:59+08:00",
+  "lastUpdated": "2026-09-23T17:32:24+08:00",
+  "lastRunStartedAt": "2026-09-23T17:15:54+08:00",
+  "lastRunCompletedAt": "2026-09-23T17:32:24+08:00",
+  "lastSuccessfulRunAt": "2026-09-23T17:32:24+08:00",
+  "lastDataChangeAt": "2026-09-23T17:32:24+08:00",
   "lastProductionDeploymentAt": null,
-  "sourceCommit": "9579ccb6a87f53d0a3ce6db85fe7ecf508823e7e",
-  "workflowRunId": "35710395297",
+  "sourceCommit": "49459ea759af9f912907a15732bc7fc5a61d605c",
+  "workflowRunId": "35841864735",
   "deploymentStatus": "pending",
   "timezone": "Asia/Shanghai",
   "nextScheduledUpdate": "每日 12:07 主任务；12:37 补偿任务（北京时间）",
-  "searchRange": "2026-09-15 至 2026-09-22",
-  "searchedPages": 334,
+  "searchRange": "2026-09-16 至 2026-09-23",
+  "searchedPages": 350,
   "total": 180,
-  "todayNew": 2,
+  "todayNew": 0,
   "completeDocuments": 59,
   "clues": 121,
   "pending": 8,
@@ -22,8 +22,8 @@
   "newCompleteDocuments": 0,
   "newClues": 0,
   "newRecords": 0,
-  "updatedRecords": 1,
-  "duplicateRecords": 34,
+  "updatedRecords": 27,
+  "duplicateRecords": 28,
   "failedSources": [
     "福建省",
     "河南省",
@@ -39,8 +39,8 @@
     "cktsycsb.jilin.chinatax.gov.cn",
     "黑龙江省",
     "吉林省",
-    "zfgs.jilin.chinatax.gov.cn",
     "chinatax.gov.cn",
+    "zfgs.jilin.chinatax.gov.cn",
     "安徽省",
     "szwz.gov.cn",
     "bjhwxr.gov.cn",
@@ -53,113 +53,100 @@
     "湖南省",
     "ja.gov.cn",
     "辽宁省",
-    "湖北省",
     "mof.gov.cn",
+    "湖北省",
     "四川省",
     "stats.gov.cn",
     "suining.gov.cn",
-    "云南省"
+    "云南省",
+    "sht.rizhao.gov.cn"
   ],
   "runSuccess": true,
-  "message": "本次已核验来源新增0份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问76页，访问失败253页，持久化待复核242个链接。",
+  "message": "本次已核验来源新增0份文书；检索覆盖不完整，不能据此认定其他日期没有新文书。本轮可访问79页，访问失败258页，持久化待复核247个链接。",
   "runMode": "scheduled",
   "coverageStatus": "partial",
-  "auditedPages": 347,
-  "accessiblePages": 76,
-  "failedPages": 253,
+  "auditedPages": 363,
+  "accessiblePages": 79,
+  "failedPages": 258,
   "unresolvedPages": 2,
-  "retryQueueSize": 242,
+  "retryQueueSize": 247,
   "pendingCandidates": [
     {
       "url": "https://xinjiang.chinatax.gov.cn/kfq/tzgg/202609/t20260921_160908.html",
       "title": "...税务局稽查局关于送达《 税务处理决定书 》《税务处罚决定书》的...",
       "dateHint": "2026-09-21",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://henan.chinatax.gov.cn/zhengzhoushiyanqu/2026/09-18/141830.html",
       "title": "...郑港 税稽 公告〔2026〕3037号 - 国家税务总局郑州航空港经济...",
       "dateHint": "2026-09-18",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /zhengzhoushiyanqu/2026/09-18/141830.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/luoyang/2026/09-17/141774.html",
       "title": "国家税务总局洛阳市税务局第一稽查局关于税务检查证遗失的公告...",
       "dateHint": "2026-09-17",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luoyang/2026/09-17/141774.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://xinjiang.chinatax.gov.cn/htdq/tzgg/202609/t20260916_160815.html",
       "title": "国家税务总局和田地区税务局-通知公告-国家税务总局和田地区税务局稽查局关于送达《税务处理决定书》的公告",
       "dateHint": "2026-09-16",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "暂时无法访问"
     },
     {
       "url": "https://fujian.chinatax.gov.cn/fzsswj/xxgk/gsgg/qtl/202609/t20260915_647581.htm",
       "title": "关于送达福州和诚佳业贸易有限公司《税收强制执行决定书》的公告...",
       "dateHint": "2026-09-15",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/202609/t20260915_647581.htm (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://fujian.chinatax.gov.cn/fzsswj/xxgk/gsgg/qtl/202609/t20260915_647575.htm",
       "title": "关于 送达 福建森超贸易有限公司《 税务处理决定书 》的 公告 _ 其他类...",
       "dateHint": "2026-09-15",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/202609/t20260915_647575.htm (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://fujian.chinatax.gov.cn/fzsswj/xxgk/gsgg/qtl/202609/t20260915_647454.htm",
       "title": "关于送达福州冠威隆贸易有限公司《催告书》公告 _ 其他类 _ 国家...",
       "dateHint": "2026-09-15",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/202609/t20260915_647454.htm (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/luohe/2026/09-14/141678.html",
       "title": "...公司 公告送达 《国家税务总局漯河市税务局稽查局 税务处理决定书 ...",
       "dateHint": "2026-09-14",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luohe/2026/09-14/141678.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/luohe/2026/09-14/141677.html",
       "title": "...公司 公告送达 《国家税务总局漯河市税务局稽查局 税务处理决定书 ...",
       "dateHint": "2026-09-14",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /luohe/2026/09-14/141677.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://henan.chinatax.gov.cn/shangqiu/2026/09-09/141473.html",
       "title": "ňŤŻň«Â šĘÄňŐí ŠÇ╗ň▒ÇňĽćńŞśňŞéšĘÄňŐíň▒ÇšČČńŞëšĘŻŠčąň▒Ç šĘÄňŐíŠľçń╣Ž ÚÇüŔżżňůČňĹŐ ňĽćšĘÄńŞëšĘŻ...",
       "dateHint": "2026-09-09",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/09-09/141473.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     },
     {
       "url": "https://anhui.chinatax.gov.cn/art/2026/9/9/art_9502_1323824.html",
       "title": "...国家税务总局淮北市税务局稽查局关于送达《 税务处理决定书 》的...",
       "dateHint": "2026-09-09",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
+      "lastCheckedAt": "2026-09-23T17:32:22+08:00",
       "reason": "暂时无法访问"
-    },
-    {
-      "url": "https://henan.chinatax.gov.cn/shangqiu/2026/09-08/141421.html",
-      "title": "国家税务总局商丘市税务局稽查局 税务文书送达公告 商 税稽 公[2026...",
-      "dateHint": "2026-09-08",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /shangqiu/2026/09-08/141421.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
-    },
-    {
-      "url": "https://henan.chinatax.gov.cn/kaifeng/2026/09-08/141426.html",
-      "title": "...局第一稽查局关于开封艮爱建筑工程有限公司《 税务处理决定书 ...",
-      "dateHint": "2026-09-08",
-      "lastCheckedAt": "2026-09-22T17:50:58+08:00",
-      "reason": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /kaifeng/2026/09-08/141426.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))"
     }
   ]
 }
