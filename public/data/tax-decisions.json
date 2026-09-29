@@ -34,7 +34,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕61号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-abfbc7c9d77a96d5",
@@ -71,7 +71,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕61号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-7098d2d749fe5b25",
@@ -108,7 +108,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(云淼供应链管理有限公司)_国家税务总局南宁市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-6e40f4c961a72f74",
@@ -145,7 +145,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局南宁市税务局第三稽查局 税务文书送达公告(云淼供应链管理有限公司)_国家税务总局南宁市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-8ce10c5d03eb7903",
@@ -220,6 +220,80 @@
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕57号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
     "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
+  },
+  {
+    "id": "DOC-54170b3fcd617974",
+    "caseGroupId": "CASE-890c41e994749f16",
+    "province": "江苏省",
+    "city": "南通市",
+    "district": null,
+    "issuingAuthority": "国家税务总局南通市税务局稽查局",
+    "inspectionAuthority": "国家税务总局南通市税务局稽查局",
+    "partyName": "如皋市创能电子科技有限公司",
+    "unifiedSocialCreditCode": null,
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "通税稽处〔2026〕253号",
+    "relatedTreatmentDocumentNumber": "通税稽处〔2026〕253号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": "主要内容如下:认定你单位为他人开具与实际经营业务情况不符的发票的行为构成虚开,鉴于上述税收违法行为人民法院已判处罚金,依照《中华人民共和国行政处罚法》第三十五条第二款,现决定不予行政处罚。",
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-28",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-29",
+    "lastVerifiedDate": "2026-09-29",
+    "completeness": "完整文书",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://jiangsu.chinatax.gov.cn/art/2026/9/28/art_9432_1788071.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局南通市税务局稽查局税务文书送达公告",
+    "pageStatus": "正常",
+    "notes": null
+  },
+  {
+    "id": "DOC-1f6689c3b28c292f",
+    "caseGroupId": "CASE-bd5eeac540295f84",
+    "province": "江苏省",
+    "city": "无锡市",
+    "district": null,
+    "issuingAuthority": "国家税务总局无锡市税务局稽查局",
+    "inspectionAuthority": "国家税务总局无锡市税务局稽查局",
+    "partyName": "江苏思铭科技有限公司",
+    "unifiedSocialCreditCode": "91320211058658788W",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "锡税稽处〔2026〕111号",
+    "relatedTreatmentDocumentNumber": "锡税稽处〔2026〕111号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-09-28",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-09-29",
+    "lastVerifiedDate": "2026-09-29",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://gtm-cn-2r42yzjvn0s.jiangsu.chinatax.gov.cn/art/2026/9/28/art_9193_1788059.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局无锡市税务局稽查局关于送达《税务处理决定书》的公告(江苏思铭科技有限公司)",
+    "pageStatus": "正常",
+    "notes": "字段“官方原文链接”存在冲突:保留原值“https://gtm-cn-2r42yzjvn0s.jiangsu.chinatax.gov.cn/art/2026/9/28/art_9193_1788059.html”,新值“https://jiangsu.chinatax.gov.cn/art/2026/9/28/art_9193_1788059.html”未静默覆盖。"
   },
   {
     "id": "DOC-182414c1c609f272",
