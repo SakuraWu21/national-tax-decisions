@@ -1,5 +1,42 @@
 [
   {
+    "id": "DOC-d1c2be389d556dfd",
+    "caseGroupId": "CASE-0aca7f4013c2015b",
+    "province": "江苏省",
+    "city": "淮安市",
+    "district": null,
+    "issuingAuthority": "国家税务总局淮安市税务局第一稽查局",
+    "inspectionAuthority": "国家税务总局淮安市税务局第一稽查局",
+    "partyName": "淮安皓泽运输有限公司",
+    "unifiedSocialCreditCode": "91320829MA1NTH0H3B",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "淮税一稽处〔2026〕89号",
+    "relatedTreatmentDocumentNumber": "淮税一稽处〔2026〕89号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-10-08",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-10-09",
+    "lastVerifiedDate": "2026-10-09",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://jiangsu.chinatax.gov.cn/art/2026/10/8/art_9566_1790007.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局淮安市税务局第一稽查局税务文书送达公告",
+    "pageStatus": "正常",
+    "notes": null
+  },
+  {
     "id": "DOC-d34efd91f6840234",
     "caseGroupId": "CASE-8a21fe430a86dbb8",
     "province": "辽宁省",
@@ -2291,7 +2328,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局辽宁省税务局 通知公告 国家税务总局丹东市税务局第二稽查局关于送达《税务处理决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-1963441553560693",
@@ -3993,7 +4030,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局辽宁省税务局 通知公告 国家税务总局营口市税务局稽查局《税务处理决定书》《税务行政处罚决定书》公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-cc157024bc89f340",
@@ -4030,7 +4067,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局辽宁省税务局 通知公告 国家税务总局营口市税务局稽查局《税务处理决定书》《税务行政处罚决定书》公告",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-867709a55be5ef94",
@@ -6250,7 +6287,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局辽宁省税务局 通知公告 国家税务总局朝阳市税务局第一稽查局关于向建平晋宏商贸有限公司送达《税务处理决定书》《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "字段“主要违法事实”已根据官方附件重新解析。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-9018166f78d49d26",
@@ -6287,7 +6324,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局辽宁省税务局 通知公告 国家税务总局朝阳市税务局第一稽查局关于向建平晋宏商贸有限公司送达《税务处理决定书》《税务行政处罚决定书》的公告",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-91c333727d39b87a",
@@ -7351,7 +7388,7 @@
     "officialPublishDate": "2026-03-10",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-07-26",
-    "lastVerifiedDate": "2026-10-08",
+    "lastVerifiedDate": "2026-10-09",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "待核验",
@@ -7647,7 +7684,7 @@
     "officialPublishDate": "2026-01-26",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-08-20",
-    "lastVerifiedDate": "2026-10-08",
+    "lastVerifiedDate": "2026-10-09",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
