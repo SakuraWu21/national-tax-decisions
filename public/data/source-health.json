@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T20:09:51+08:00",
+  "generatedAt": "2026-10-09T19:40:46+08:00",
   "sources": [
     {
       "source": "福建省",
@@ -8,8 +8,8 @@
       "succeeded": 0,
       "failed": 94,
       "status": "unreachable",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
-      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /fzsswj/xxgk/gsgg/qtl/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
+      "lastError": "ConnectionError: HTTPSConnectionPool(host='fujian.chinatax.gov.cn', port=443): Max retries exceeded with url: /pingtanswj/zfxxgkzl/zfxxgkml/qtgg/ (Caused by NewConnectionError(\"HTTPSConnection(host='fujian.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
       "pendingRetries": 89
     },
     {
@@ -19,7 +19,7 @@
       "succeeded": 0,
       "failed": 30,
       "status": "unreachable",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='henan.chinatax.gov.cn', port=443): Max retries exceeded with url: /kaifeng/2026/03-26/121809.html (Caused by NewConnectionError(\"HTTPSConnection(host='henan.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
       "pendingRetries": 30
     },
@@ -30,51 +30,51 @@
       "succeeded": 0,
       "failed": 27,
       "status": "unreachable",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
       "lastError": "ConnectionError: HTTPSConnectionPool(host='guizhou.chinatax.gov.cn', port=443): Max retries exceeded with url: /sjpd/ass/tzgg_59745/ (Caused by NewConnectionError(\"HTTPSConnection(host='guizhou.chinatax.gov.cn', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
       "pendingRetries": 24
     },
     {
       "source": "广西壮族自治区",
-      "checked": 50,
-      "checkedThisRun": 50,
-      "succeeded": 42,
+      "checked": 52,
+      "checkedThisRun": 52,
+      "succeeded": 44,
       "failed": 8,
       "status": "degraded",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
-      "lastError": "ConnectTimeout: HTTPConnectionPool(host='guangxi.chinatax.gov.cn', port=8000): Max retries exceeded with url: /nanning/xxgk/swjcgg/ (Caused by ConnectTimeoutError(<HTTPConnection(host='guangxi.chinatax.gov.cn', port=8000) at 0x7fb59cc97bf0>, 'Connection to guangxi.chinatax.gov.cn timed out. (connect timeout=9)'))",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
+      "lastError": "ConnectTimeout: HTTPConnectionPool(host='guangxi.chinatax.gov.cn', port=8000): Max retries exceeded with url: /nanning/xxgk/swjcgg/ (Caused by ConnectTimeoutError(<HTTPConnection(host='guangxi.chinatax.gov.cn', port=8000) at 0x7f1061b432c0>, 'Connection to guangxi.chinatax.gov.cn timed out. (connect timeout=9)'))",
       "pendingRetries": 9
     },
     {
       "source": "广东省",
       "checked": 6,
       "checkedThisRun": 6,
-      "succeeded": 3,
-      "failed": 3,
-      "status": "degraded",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
+      "succeeded": 0,
+      "failed": 6,
+      "status": "unreachable",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
       "lastError": "SSLError: HTTPSConnectionPool(host='gdzwfw.gov.cn', port=443): Max retries exceeded with url: /portal/index?region=440100 (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'gdzwfw.gov.cn'. (_ssl.c:1010)\")))",
-      "pendingRetries": 2
+      "pendingRetries": 5
     },
     {
       "source": "江苏省",
-      "checked": 25,
-      "checkedThisRun": 25,
-      "succeeded": 25,
+      "checked": 23,
+      "checkedThisRun": 23,
+      "succeeded": 23,
       "failed": 0,
       "status": "degraded",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
       "lastError": "",
       "pendingRetries": 1
     },
     {
       "source": "浙江省",
-      "checked": 20,
-      "checkedThisRun": 20,
-      "succeeded": 8,
+      "checked": 23,
+      "checkedThisRun": 23,
+      "succeeded": 11,
       "failed": 12,
       "status": "degraded",
-      "lastCheckedAt": "2026-10-08T20:09:51+08:00",
+      "lastCheckedAt": "2026-10-09T19:40:46+08:00",
       "lastError": "ConnectionError: HTTPConnectionPool(host='portal.zjzwfw.gov.cn', port=80): Max retries exceeded with url: /pc/portal/hall (Caused by ReadTimeoutError(\"HTTPConnectionPool(host='portal.zjzwfw.gov.cn', port=80): Read timed out. (read timeout=28)\"))",
       "pendingRetries": 0
     }
