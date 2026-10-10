@@ -34,7 +34,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局无锡市税务局稽查局关于送达《税务处理决定书》的公告(无锡正立机电有限公司)",
     "pageStatus": "正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-d1c2be389d556dfd",
@@ -62,7 +62,7 @@
     "officialPublishDate": "2026-10-08",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-10-09",
-    "lastVerifiedDate": "2026-10-09",
+    "lastVerifiedDate": "2026-10-10",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
