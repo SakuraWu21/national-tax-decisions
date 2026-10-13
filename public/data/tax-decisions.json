@@ -34,7 +34,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局南宁市税务局第二稽查局税务文书送达公告_国家税务总局南宁市税务局",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-510261a33ee08d0b",
@@ -71,7 +71,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局南宁市税务局第二稽查局税务文书送达公告_国家税务总局南宁市税务局",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-ac182e836e141baa",
@@ -108,7 +108,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局内蒙古自治区税务局-\n旗县局通知公告",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-7245a629f7d355da",
@@ -145,7 +145,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局内蒙古自治区税务局-\n旗县局通知公告",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-25931604ed28aaf0",
@@ -182,7 +182,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局内蒙古自治区税务局-\n旗县局通知公告",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-5ebf9231ec8de6aa",
@@ -358,7 +358,7 @@
     "officialPublishDate": "2026-10-08",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-10-11",
-    "lastVerifiedDate": "2026-10-12",
+    "lastVerifiedDate": "2026-10-13",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -395,7 +395,7 @@
     "officialPublishDate": "2026-10-08",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-10-11",
-    "lastVerifiedDate": "2026-10-12",
+    "lastVerifiedDate": "2026-10-13",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
@@ -405,6 +405,43 @@
     "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局淮安市税务局第一稽查局税务文书送达公告",
     "pageStatus": "正常",
     "notes": "Excel 与 CSV 历史数据已合并核对。"
+  },
+  {
+    "id": "DOC-7b2eb98693709b73",
+    "caseGroupId": "CASE-41ba7e42f9486e9c",
+    "province": "江苏省",
+    "city": "苏州市",
+    "district": null,
+    "issuingAuthority": "国家税务总局苏州市税务局稽查局",
+    "inspectionAuthority": "国家税务总局苏州市税务局稽查局",
+    "partyName": "苏州伦冉岗酒店管理有限公司",
+    "unifiedSocialCreditCode": "91320505MADJ4TKB6Q",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "苏州税稽处〔2026〕164号",
+    "relatedTreatmentDocumentNumber": "苏州税稽处〔2026〕164号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-10-08",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-10-13",
+    "lastVerifiedDate": "2026-10-13",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://gtm-cn-2r42yzjvn0s.jiangsu.chinatax.gov.cn/art/2026/10/8/art_9363_1790180.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局苏州市税务局稽查局税务文书送达公告(2026年第80号)",
+    "pageStatus": "正常",
+    "notes": "字段“决定书文号”存在冲突:保留原值“苏州税稽处〔2026〕164号”,新值“苏州税稽处〔2026〕162号”未静默覆盖。"
   },
   {
     "id": "DOC-d34efd91f6840234",
