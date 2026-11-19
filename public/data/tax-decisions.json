@@ -34,7 +34,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕86号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-23f2ac1b7c7a662a",
@@ -71,7 +71,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕86号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
-    "notes": null
+    "notes": "Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-d01a40a43b15da20",
@@ -108,7 +108,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕85号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-e6942e91ff0edb40",
@@ -145,7 +145,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局河池市税务局第二稽查局税务文书送达公告(河市税二稽公告〔2026〕85号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-374ef756184fe816",
@@ -210,7 +210,7 @@
     "officialPublishDate": "2026-11-13",
     "thirdPartyPublishDate": null,
     "firstDiscoveredDate": "2026-11-18",
-    "lastVerifiedDate": "2026-11-18",
+    "lastVerifiedDate": "2026-11-19",
     "completeness": "仅公告送达/仅文号线索",
     "sourceLevel": "税务机关官网",
     "verificationStatus": "已核验",
