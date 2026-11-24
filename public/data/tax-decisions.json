@@ -34,7 +34,7 @@
     "backupUrl": null,
     "pageTitle": "税务文书送达公告(钦市税稽处〔2026〕52号)_国家税务总局钦州市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-e10d0aab21feadf8",
@@ -71,7 +71,7 @@
     "backupUrl": null,
     "pageTitle": "税务文书送达公告(钦市税一稽处〔2026〕35号)_国家税务总局钦州市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-2a388883f0f2361b",
@@ -108,7 +108,7 @@
     "backupUrl": null,
     "pageTitle": "国家税务总局南宁市税务局第一稽查局税务文书送达公告(广西意达源机械设备有限公司)_国家税务总局南宁市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-ffe6baf934cfcdef",
@@ -145,7 +145,7 @@
     "backupUrl": null,
     "pageTitle": "税务文书送达公告(钦市税稽处〔2026〕53号)_国家税务总局钦州市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-5fd082aa3ff63770",
@@ -182,7 +182,7 @@
     "backupUrl": null,
     "pageTitle": "税务文书送达公告(钦市税稽处〔2026〕54号)_国家税务总局钦州市税务局",
     "pageStatus": "附件正常",
-    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。"
+    "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
   },
   {
     "id": "DOC-8f179ead1ab7d5c9",
@@ -220,6 +220,43 @@
     "pageTitle": "国家税务总局河池市税务局第三稽查局税务文书送达公告(河市税三稽公告〔2026〕1006号)_国家税务总局河池市税务局",
     "pageStatus": "附件正常",
     "notes": "官方附件可下载,但尚未提取到可核实的案情或金额,按文号线索收录。 Excel 与 CSV 历史数据已合并核对。"
+  },
+  {
+    "id": "DOC-8c473ffb05225671",
+    "caseGroupId": "CASE-794eb3613f450464",
+    "province": "江苏省",
+    "city": "无锡市",
+    "district": null,
+    "issuingAuthority": "国家税务总局无锡市税务局第一稽查局",
+    "inspectionAuthority": "国家税务总局无锡市税务局第一稽查局",
+    "partyName": "无锡兴茂源合商贸有限公司",
+    "unifiedSocialCreditCode": "91320214MAEUQHNX4Y",
+    "legalRepresentative": null,
+    "documentType": "税务处理决定书",
+    "documentNumber": "锡税一稽处〔2026〕217号",
+    "relatedTreatmentDocumentNumber": "锡税一稽处〔2026〕217号",
+    "relatedPenaltyDocumentNumber": null,
+    "violationFacts": null,
+    "taxTypes": null,
+    "recoveredTaxAmount": null,
+    "lateFeeAmount": null,
+    "fineAmount": null,
+    "confiscatedIncomeAmount": null,
+    "result": null,
+    "decisionDate": null,
+    "officialPublishDate": "2026-11-23",
+    "thirdPartyPublishDate": null,
+    "firstDiscoveredDate": "2026-11-24",
+    "lastVerifiedDate": "2026-11-24",
+    "completeness": "仅公告送达/仅文号线索",
+    "sourceLevel": "税务机关官网",
+    "verificationStatus": "已核验",
+    "officialUrl": "https://jiangsu.chinatax.gov.cn/art/2026/11/23/art_9193_1804875.html",
+    "attachmentUrl": null,
+    "backupUrl": null,
+    "pageTitle": "国家税务总局江苏省税务局网站 通知公告 国家税务总局无锡市税务局第一稽查局税务文书送达公告(2026年11月23日)",
+    "pageStatus": "正常",
+    "notes": null
   },
   {
     "id": "DOC-1caa66e86dad79cb",
